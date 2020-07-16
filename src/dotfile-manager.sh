@@ -27,10 +27,12 @@ fatal() {
 }
 
 getFilePath() {
-	[[ "${1:0:1}" == "/" ]] && FILE_PATH=$1 || FILE_PATH="$PWD/$1" # get file path
-	[[ -f $FILE_PATH ]] || fatal "Error: '$1' does not exist or is not a regular file"
-	FILE_PATH=$(realpath --no-symlinks $FILE_PATH) # get absolute file path
-	[[ "${FILE_PATH##$HOME}" != "$FILE_PATH" ]] || fatal "Error: '$1' is not in the user home directory"
+	local path
+	[[ "${1:0:1}" == "/" ]] && path=$1 || path="$PWD/$1" # get file path
+	[[ -f $path ]] || fatal "Error: '$1' does not exist or is not a regular file"
+	path=$(realpath --no-symlinks $path) # get absolute file path
+	[[ "${path##$HOME}" != "$path" ]] || fatal "Error: '$1' is not in the user home directory"
+	echo "$path"
 }
 
 #
