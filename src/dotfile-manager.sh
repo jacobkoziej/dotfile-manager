@@ -16,3 +16,16 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 STORE_DIR="${DOTFILE_STORE_DIR:-$HOME/.dotfiles}"
+
+#
+# BEGIN supplementary functions
+#
+
+fail() {
+	echo "$@" >&2
+	exit 1
+}
+
+#
+# END supplementary functions
+#
