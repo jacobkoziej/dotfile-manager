@@ -35,6 +35,12 @@ getFilePath() {
 	echo "$path"
 }
 
+getSymLinkPath() {
+	# path argument must be absolute path
+	local path="$(realpath $1)"
+	[[ "$path" != "$1" ]] && echo "$path"
+}
+
 #
 # END supplementary functions
 #
