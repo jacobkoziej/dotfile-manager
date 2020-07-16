@@ -41,6 +41,17 @@ getSymLinkPath() {
 	[[ "$path" != "$1" ]] && echo "$path"
 }
 
+existCheck() {
+	# path argument must be processed by getFilePath first
+	if [[ "${1/$STORE_DIR/}" != "$1" ]]; then
+		## file is in $STOW_DIR
+		[[ -f "${1/$STORE_DIR/$HOME}" ]] && echo "true" || echo "false"
+	else
+		## file is not in $STOW_DIR
+		[[ -f "${1/$HOME/$STORE_DIR}" ]] && echo "true" || echo "false"
+	fi
+}
+
 #
 # END supplementary functions
 #
