@@ -26,6 +26,13 @@ fail() {
 	exit 1
 }
 
+getFilePath() {
+	[[ "${1:0:1}" == "/" ]] && FILE_PATH=$1 || FILE_PATH="$PWD/$1" # get file path
+	[[ -f $FILE_PATH ]] || fail "Error: '$1' does not exist or is not a regular file"
+	FILE_PATH=$(realpath --no-symlinks $FILE_PATH) # get absolute file path
+	[[ "${FILE_PATH##$HOME}" != "$FILE_PATH" ]] || fail "Error: '$1' is not in the user home directory"
+}
+
 #
 # END supplementary functions
 #
