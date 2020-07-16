@@ -50,6 +50,16 @@ getSymLinkPath() {
 #
 
 stow() {
+	local temp
+	local file_paths=()
+
+	while [[ "$#" != "0" ]]; do
+		temp=$(getFilePath $1)
+		[[ -z $(getSymLinkPath $temp) ]] || fatal "Error: '$1' is a symbolic link"
+		file_paths+=("$temp")
+		shift
+	done
+
 	return 0
 }
 
