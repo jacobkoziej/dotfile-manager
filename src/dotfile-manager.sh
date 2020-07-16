@@ -44,3 +44,15 @@ getSymLinkPath() {
 #
 # END supplementary functions
 #
+
+#
+# BEGIN main functions
+#
+
+stow() {
+	return 0
+}
+
+#
+# END main functions
+#
