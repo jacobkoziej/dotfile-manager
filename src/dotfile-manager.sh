@@ -56,3 +56,9 @@ stow() {
 #
 # END main functions
 #
+
+case $1 in
+	stow) shift; stow "$@";;
+esac
+
+exit 0
