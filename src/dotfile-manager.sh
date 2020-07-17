@@ -66,7 +66,7 @@ stow() {
 
 	while [[ "$#" != "0" ]]; do
 		temp=$(getFilePath $1)
-		[[ -z $(getSymLinkPath $temp) ]] || fatal "Error: '$1' is a symbolic link"
+		[[ -z $(getSymLinkPath $temp) ]] || [[ "$(getSymLinkPath $temp)" =~ "$STORE_DIR" ]] || fatal "Error: '$1' is a foreign symbolic link"
 		file_paths+=("$temp")
 		shift
 	done
