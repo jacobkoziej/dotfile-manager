@@ -71,6 +71,18 @@ stow() {
 		shift
 	done
 
+	local path
+	for path in ${file_paths[@]}; do
+		if [[ "$(existCheck $path)" == "true" ]]; then
+			echo "Skipping: '$path' already stowed"
+		else
+			mv "$path" "${path/$HOME/$STORE_DIR}"
+			echo "Moved: '$path' -> '${path/$HOME/$STORE_DIR}'"
+			ln --symbolic --relative "${path/$HOME/$STORE_DIR}" "$path"
+			echo "Linked: '${path/$HOME/$STORE_DIR}' => '$path'"
+		fi
+	done
+
 	return 0
 }
 
