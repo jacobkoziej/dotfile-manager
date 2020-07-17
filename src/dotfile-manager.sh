@@ -134,6 +134,7 @@ deploy() {
 case $1 in
 	stow) shift; stow "$@";;
 	unstow) shift; unstow "$@";;
+	deploy) shift; deploy "$@";;
 esac
 
 exit 0
