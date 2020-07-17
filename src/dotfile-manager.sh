@@ -86,6 +86,10 @@ stow() {
 	return 0
 }
 
+unstow() {
+	return 0
+}
+
 #
 # END main functions
 #
