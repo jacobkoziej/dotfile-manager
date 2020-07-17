@@ -113,6 +113,9 @@ unstow() {
 		echo "Restored: '$path'"
 	done
 
+	# delete any empty directories in $STORE_DIR
+	find "${STORE_DIR}" -empty -type d -delete
+
 	return 0
 }
 
