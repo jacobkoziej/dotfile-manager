@@ -87,7 +87,7 @@ stow() {
 			mv "$path" "${path/$HOME/$STORE_DIR}"
 			echo "Moved: '$path' -> '${path/$HOME/$STORE_DIR}'"
 			ln --symbolic --relative "${path/$HOME/$STORE_DIR}" "$path"
-			echo "Linked: '${path/$HOME/$STORE_DIR}' => '$path'"
+			echo "Linked: '${path/$HOME/$STORE_DIR}' -> '$path'"
 		fi
 	done
 
