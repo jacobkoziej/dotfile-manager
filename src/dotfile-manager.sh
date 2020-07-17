@@ -123,6 +123,10 @@ unstow() {
 	return 0
 }
 
+deploy() {
+	return 0
+}
+
 #
 # END main functions
 #
