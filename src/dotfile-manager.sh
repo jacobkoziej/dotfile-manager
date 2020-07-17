@@ -70,6 +70,11 @@ stow() {
 	while [[ "$#" != "0" ]]; do
 		temp=$(getFilePath $1)
 		[[ -z $(getSymLinkPath $temp) ]] || [[ "$(getSymLinkPath $temp)" =~ "$STORE_DIR" ]] || fatal "Error: '$1' is a foreign symbolic link"
+		if [[ ! -d "${temp/$HOME/$STORE_DIR}" ]]; then
+			local dir_create
+			dir_create="${temp/$HOME/$STORE_DIR}"
+			mkdir -p "${dir_create%/*}"
+		fi
 		file_paths+=("$temp")
 		shift
 	done
