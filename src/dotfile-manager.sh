@@ -101,7 +101,11 @@ unstow() {
 	while [[ "$#" != "0" ]]; do
 		temp=$(getFilePath $1)
 		[[ -z $(getSymLinkPath $temp) ]] || [[ "$(getSymLinkPath $temp)" =~ "$STORE_DIR" ]] || fatal "Error: '$1' is a foreign symbolic link"
-		[[ "$(existCheck $temp)" == "true" ]] || fatal "Error: '$1' is not stowed"
+		if [[ "$(existCheck $temp)" == "false" ]]; then
+			echo "Skipping: '$1' is not stowed"
+			shift
+			continue
+		fi
 		file_paths+=("$temp")
 		shift
 	done
