@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+set -euo pipefail
+
 STORE_DIR="${DOTFILE_STORE_DIR:-$HOME/.dotfiles}"
 
 #
