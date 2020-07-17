@@ -100,6 +100,13 @@ unstow() {
 		shift
 	done
 
+	local path
+	for path in ${file_paths[@]}; do
+		[[ "$(getSymLinkPath $temp)" =~ "$STORE_DIR" ]] || path="${path/$STORE_DIR/$HOME}"
+		mv  "${path/$HOME/$STORE_DIR}" "$path"
+		echo "Restored: '$path'"
+	done
+
 	return 0
 }
 
