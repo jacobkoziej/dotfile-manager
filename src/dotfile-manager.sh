@@ -96,6 +96,7 @@ unstow() {
 
 case $1 in
 	stow) shift; stow "$@";;
+	unstow) shift; unstow "$@";;
 esac
 
 exit 0
