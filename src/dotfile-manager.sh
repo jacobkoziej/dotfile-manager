@@ -18,6 +18,7 @@
 set -euo pipefail
 
 STORE_DIR="${DOTFILE_STORE_DIR:-$HOME/.dotfiles}"
+[[ -d "$STORE_DIR" ]] || mkdir -p "$STORE_DIR"
 
 #
 # BEGIN supplementary functions
