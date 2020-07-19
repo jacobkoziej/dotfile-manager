@@ -124,6 +124,18 @@ unstow() {
 }
 
 deploy() {
+	local path
+	local file_paths=()
+	local conflict_paths=()
+
+	for path in $(find $STORE_DIR -type f -print | grep -v -E '.git/|.md'); do
+		if [[ "$(existCheck $path)" == "false" ]]; then
+			file_paths+=("$path")
+		else
+			conflict_paths+=("${path/$STORE_DIR/$HOME}")
+		fi
+	done
+
 	return 0
 }
 
