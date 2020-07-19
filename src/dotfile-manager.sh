@@ -136,6 +136,22 @@ deploy() {
 		fi
 	done
 
+	local dir_check
+	if [[ -z ${conflict_paths[@]} ]]; then
+		for path in ${file_paths[@]}; do
+			dir_check="${path/$STORE_DIR/$HOME}"
+			[[ -d "${dir_check%/*}" ]] || mkdir -p "${dir_check%/*}"
+			ln --symbolic --relative "$path" "${path/$STORE_DIR/$HOME}"
+			echo "Linked: '$path' -> '${path/$STORE_DIR/$HOME}'"
+		done
+		echo "Deployed dotfiles successfully"
+	else
+		for path in ${conflict_paths[@]}; do
+			echo "Error: '$path' exists"
+		done
+		fatal "Clean home directory to deploy"
+	fi
+
 	return 0
 }
 
