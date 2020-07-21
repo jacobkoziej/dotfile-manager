@@ -155,6 +155,12 @@ deploy() {
 	return 0
 }
 
+info() {
+	echo "DOTS - a simple tool for managing dotfiles with VCS"
+	echo "Copyright (C) 2020  Jacob Koziej"
+	echo "Version: 0.1.0"
+}
+
 #
 # END main functions
 #
