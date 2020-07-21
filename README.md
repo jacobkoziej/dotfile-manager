@@ -14,3 +14,8 @@ best fits their workflow.
 * `dots deploy` - create links to all the files in the dotfile directory
 * `dots help` - show program usage
 * `dots info` - show program information
+
+## Installation
+**DISCLAIMER:** this project is still in development and **SUBJECT TO CHANGE**
+* `make install` - install the script
+* `make uninstall` - uninstall the script
