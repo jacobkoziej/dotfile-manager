@@ -178,6 +178,8 @@ tldr() {
 # END main functions
 #
 
+[[ "$#" == "0" ]] && fatal "Error: no command, run 'dots help' for command options"
+
 case $1 in
 	stow) shift; stow "$@";;
 	unstow) shift; unstow "$@";;
