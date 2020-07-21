@@ -161,6 +161,19 @@ info() {
 	echo "Version: 0.1.0"
 }
 
+tldr() {
+	echo "dots stow <file path>"
+	echo "	stow file in dotfile directory and create symlink"
+	echo "dots unstow <file path>"
+	echo "	restore file from dotfile directory"
+	echo "dots deploy"
+	echo "	create symbolic links to files in dotfile directory"
+	echo "dots help"
+	echo "	show usage information"
+	echo "dots info"
+	echo "	show program information"
+}
+
 #
 # END main functions
 #
