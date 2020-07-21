@@ -19,3 +19,7 @@ best fits their workflow.
 **DISCLAIMER:** this project is still in development and **SUBJECT TO CHANGE**
 * `make install` - install the script
 * `make uninstall` - uninstall the script
+
+## License
+This project is licensed under the GPLv3. More information can be found in
+[LICENSE.md](LICENSE.md)
