@@ -184,6 +184,7 @@ case $1 in
 	deploy) shift; deploy "$@";;
 	help) tldr;;
 	info) info;;
+	*) fatal "Error: unknown command '$1'"
 esac
 
 exit 0
