@@ -183,6 +183,7 @@ case $1 in
 	unstow) shift; unstow "$@";;
 	deploy) shift; deploy "$@";;
 	help) tldr;;
+	info) info;;
 esac
 
 exit 0
