@@ -7,3 +7,10 @@ extremely easy by effortlessly stowing your dotfiles into a predefined directory
 (by default `~/.dotfiles`) and creating relative symbolic links to the stowed
 files. The user is then free to manage the dotfile directory in the way that
 best fits their workflow.
+
+## Usage
+* `dots stow ~/.vimrc` - stow `.vimrc` in the dotfile directory
+* `dots unstow ~/.vimrc` - unstow `.vimrc` from the dotfile directory
+* `dots deploy` - create links to all the files in the dotfile directory
+* `dots help` - show program usage
+* `dots info` - show program information
