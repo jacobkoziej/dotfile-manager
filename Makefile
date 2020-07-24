@@ -9,4 +9,5 @@ install:
 	install -v -d "$(DESTDIR)$(BINDIR)/" && install -m 0755 -v src/dotfile-manager.sh "$(DESTDIR)$(BINDIR)/dots"
 
 uninstall:
-	rm -f /usr/bin/dots
+	@rm -vrf \
+		"$(DESTDIR)$(BINDIR)/dots"
