@@ -11,6 +11,7 @@ To see unreleased features checkout the `develop` branch.
 ### Added
 
 * Arch User Repository package to README.md
+* Email to info
 
 ### Changed
 
