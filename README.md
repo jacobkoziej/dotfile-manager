@@ -32,7 +32,8 @@ best fits their workflow.
 make install
 ```
 
-## License
+## Copyright & Licensing
 
-This project is licensed under the GPLv3. More information can be found in
-[LICENSE.md](LICENSE.md)
+Copyright (C) 2020  Jacob Koziej <jacobkoziej@gmail.com>
+
+Distributed under the [GPLv3](LICENSE.md)
