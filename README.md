@@ -21,8 +21,12 @@ best fits their workflow.
 
 **DISCLAIMER:** this project is still in development and **SUBJECT TO CHANGE**
 
-* `make install` - install the script
-* `make uninstall` - uninstall the script
+### From Source
+
+```bash
+# Run in the project root
+make install
+```
 
 ## License
 
