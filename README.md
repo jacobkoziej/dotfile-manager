@@ -21,6 +21,10 @@ best fits their workflow.
 
 **DISCLAIMER:** this project is still in development and **SUBJECT TO CHANGE**
 
+### Available Packages
+
+* Arch User Repository - [`dots`](https://aur.archlinux.org/packages/dots/)
+
 ### From Source
 
 ```bash
