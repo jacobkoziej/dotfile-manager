@@ -157,9 +157,9 @@ deploy() {
 
 info() {
 	echo "DOTS - a simple tool for managing dotfiles with VCS"
-	echo "Copyright (C) 2020  Jacob Koziej"
+	echo "Copyright (C) 2020  Jacob Koziej <jacobkoziej@gmail.com>"
 	echo "License: GPLv3"
-	echo "Version: 0.1.1"
+	echo "Version: 0.1.2"
 }
 
 tldr() {
