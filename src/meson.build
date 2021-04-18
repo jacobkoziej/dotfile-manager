@@ -13,22 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-project(
-  'dotfile-manager',
-  'c',
-  version: '0.1.2',
-  license: 'GPLv3',
-  default_options: [
-    'c_std=gnu18'
-  ]
-)
-
-
-subdir('src')
-
-
-executable(
-  'dots',
-  sources: dots_sources,
-  install: true
+dots_sources = files(
+  'dotfile-manager.c'
 )
