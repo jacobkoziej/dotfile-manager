@@ -19,6 +19,13 @@
 #ifndef PATH_H
 #define PATH_H
 
+#define _GNU_SOURCE
+
+#include <stdlib.h>
+
+
+#define path_abs(path) canonicalize_file_name(path)
+
 
 char *path_sub(char *path, char *patt, char *sub);
 
