@@ -20,4 +20,6 @@
 #define PATH_H
 
 
+char *path_sub(char *path, char *patt, char *sub);
+
 #endif /* PATH_H */

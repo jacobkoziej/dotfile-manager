@@ -16,4 +16,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#define _GNU_SOURCE
+
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "path.h"
+
+
+/* perform a path substitution */
+char *path_sub(char *path, char *patt, char *sub)
+{
+	assert(path != NULL);
+	assert(patt != NULL);
+	assert(sub  != NULL);
+
+	size_t offset   = 0;
+	size_t patt_len = strlen(patt);
+
+	while (offset < patt_len) {
+		if (path[offset] == patt[offset]) {
+			++offset;
+		} else {
+			return NULL;
+		}
+	}
+
+	char *out_path = malloc(strlen(path + offset) + strlen(sub) + 1);
+	if (!out_path) return NULL;
+
+	strcat(out_path, sub);
+	strcat(out_path, path + offset);
+
+	return out_path;
+}
