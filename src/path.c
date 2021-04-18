@@ -25,6 +25,44 @@
 #include "path.h"
 
 
+/* get a relative path from an absolute path */
+char *path_rel(char *to, char *from)
+{
+	assert(to   != NULL);
+	assert(from != NULL);
+
+	/* remove common prefix */
+	while (*to == *from) {
+		++to; ++from;
+	}
+
+	// strip only up to dir
+	while (*to != '/') {
+		--to; --from;
+	}
+
+	++to; ++from;  // strip '/'
+
+
+	/* generate relative path */
+	int    dir_cnt  = 0;
+	size_t from_siz = strlen(from);
+
+	for (size_t i = 0; i < from_siz; i++) {
+		if (from[i] == '/') ++dir_cnt;
+	}
+
+	char *output = malloc(strlen(to) + (strlen("../") * dir_cnt) + 1);
+	if (!output) return NULL;
+
+	for (int i = 0; i < dir_cnt; i++) {
+		strcat(output, "../");
+	}
+	strcat(output, to);
+
+	return output;
+}
+
 /* perform a path substitution */
 char *path_sub(char *path, char *patt, char *sub)
 {
