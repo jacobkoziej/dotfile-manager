@@ -14,5 +14,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 dots_sources = files(
-  'dotfile-manager.c'
+  'dotfile-manager.c',
+  'path.c'
 )
