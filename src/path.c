@@ -16,13 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#define _GNU_SOURCE
+#include "path.h"
 
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "path.h"
 
 
 /* get a relative path from an absolute path */
