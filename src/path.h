@@ -21,6 +21,7 @@
 
 #define _GNU_SOURCE
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 
@@ -28,8 +29,17 @@
 #define path_abs(path) canonicalize_file_name(path)
 
 
+typedef struct path_s {
+	bool proccess;
+	char *input;
+	char *absolute;
+	char *relative;
+} path_t;
+
+
 char *path_rel(char *to, char *from);
 char *path_sub(char *path, char *patt, char *sub);
+int   path_init(char *path, path_t *in);
 int   path_mkdir(char *path, mode_t mode);
 
 #endif /* PATH_H */

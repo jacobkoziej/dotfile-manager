@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 
 /* get a relative path from an absolute path */
@@ -89,6 +90,28 @@ char *path_sub(char *path, char *patt, char *sub)
 	strcat(out_path, path + offset);
 
 	return out_path;
+}
+
+/* initialize a path structure */
+int path_init(char *path, path_t *in)
+{
+	assert(path != NULL);
+	assert(in   != NULL);
+
+	path_t temp = {
+		.proccess  = false,
+		.input     = NULL,
+		.absolute  = NULL,
+		.relative  = NULL,
+	};
+
+	temp.input = strdup(path);
+	if (!temp.input) return 0;
+
+	temp.proccess = access(path, F_OK) ? false : true;
+
+	*in = temp;
+	return 1;
 }
 
 /* make parent directories as needed */
