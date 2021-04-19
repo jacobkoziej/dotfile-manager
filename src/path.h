@@ -33,6 +33,7 @@ typedef struct path_s {
 	bool proccess;
 	char *input;
 	char *absolute;
+	char *link;
 	char *relative;
 } path_t;
 
