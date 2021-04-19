@@ -132,7 +132,7 @@ int path_mkdir(char *path, mode_t mode)
 		closedir(dir);
 		*c = '/';
 	}
-	if (!mkdir(path_cp, mode)) goto error;
+	if (mkdir(path_cp, mode)) goto error;
 
 	free(path_cp);
 	return 1;
