@@ -23,10 +23,14 @@
 
 int main(int argc, char **argv)
 {
+	/* initial options */
 	struct {
 		int     file_cnt;
 		path_t *files;
 	} options;
+
+	options.file_cnt = 0;
+	options.files    = NULL;
 
 
 	return EXIT_SUCCESS;
