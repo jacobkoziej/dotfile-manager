@@ -16,10 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "path.h"
+
 #include <stdlib.h>
 
 
 int main(int argc, char **argv)
 {
+	struct {
+		int     file_cnt;
+		path_t *files;
+	} options;
+
+
 	return EXIT_SUCCESS;
 }
