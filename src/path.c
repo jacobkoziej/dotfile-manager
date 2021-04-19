@@ -19,8 +19,11 @@
 #include "path.h"
 
 #include <assert.h>
+#include <dirent.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 
 /* get a relative path from an absolute path */
@@ -86,4 +89,32 @@ char *path_sub(char *path, char *patt, char *sub)
 	strcat(out_path, path + offset);
 
 	return out_path;
+}
+
+/* make parent directories as needed */
+int path_mkdir(char *path, mode_t mode)
+{
+	assert (path != NULL);
+
+	char *path_cp = strdup(path);
+	if (!path_cp) goto error;
+
+	for (char *c = strchr(path_cp + 1, '/'); c; c = strchr(c + 1, '/')) {
+		*c = '\0';
+		DIR *dir = opendir(path_cp);
+
+		if (!dir && errno == ENOENT)  // dir doesn't exist
+			if (mkdir(path_cp, mode)) goto error;
+
+		closedir(dir);
+		*c = '/';
+	}
+	if (!mkdir(path_cp, mode)) goto error;
+
+	free(path_cp);
+	return 1;
+
+error:
+	free(path_cp);
+	return 0;
 }
