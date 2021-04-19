@@ -18,6 +18,8 @@
 
 #include "path.h"
 
+#include <getopt.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 
@@ -31,6 +33,28 @@ int main(int argc, char **argv)
 
 	options.file_cnt = 0;
 	options.files    = NULL;
+
+
+	/* parse command-line arguments */
+	while (true) {
+		int opt, long_index;
+
+		char *flags = "";
+		struct option long_flags[] = {
+			{0, 0, 0, 0}
+		};
+
+		opt = getopt_long(argc, argv, flags, long_flags, &long_index);
+
+		if (opt == -1) break;  // no more flags
+
+		switch (opt) {
+			// invalid option
+			case '?':
+			default:
+				return EXIT_FAILURE;
+		}
+	}
 
 
 	return EXIT_SUCCESS;
