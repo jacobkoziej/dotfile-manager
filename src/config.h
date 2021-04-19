@@ -19,5 +19,13 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include "path.h"
+
+
+typedef struct config_s {
+	int     file_cnt;
+	path_t *files;
+	char    mode;
+} config_t;
 
 #endif /* CONFIG_H */

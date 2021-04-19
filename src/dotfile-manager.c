@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include "path.h"
 
 #include <getopt.h>
@@ -26,15 +27,11 @@
 int main(int argc, char **argv)
 {
 	/* initial options */
-	struct {
-		int     file_cnt;
-		path_t *files;
-		char    mode;
-	} options;
-
-	options.file_cnt = 0;
-	options.files    = NULL;
-	options.mode     = '\0';
+	config_t options = {
+		.file_cnt = 0,
+		.files    = NULL,
+		.mode     = '\0'
+	};
 
 
 	/* parse command-line arguments */
