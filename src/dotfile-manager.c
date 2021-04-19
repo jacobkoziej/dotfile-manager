@@ -29,18 +29,21 @@ int main(int argc, char **argv)
 	struct {
 		int     file_cnt;
 		path_t *files;
+		char    mode;
 	} options;
 
 	options.file_cnt = 0;
 	options.files    = NULL;
+	options.mode     = '\0';
 
 
 	/* parse command-line arguments */
 	while (true) {
 		int opt, long_index;
 
-		char *flags = "";
+		char *flags = "s";
 		struct option long_flags[] = {
+			{"stow", no_argument, NULL, 's'},
 			{0, 0, 0, 0}
 		};
 
@@ -49,6 +52,11 @@ int main(int argc, char **argv)
 		if (opt == -1) break;  // no more flags
 
 		switch (opt) {
+			// stow
+			case 's':
+				options.mode = opt;
+				break;
+
 			// invalid option
 			case '?':
 			default:
