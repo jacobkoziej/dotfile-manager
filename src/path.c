@@ -141,3 +141,14 @@ error:
 	free(path_cp);
 	return 0;
 }
+
+/* free members of path structure */
+void path_del(path_t *in)
+{
+	if (!in) return;
+
+	free(in->input);
+	free(in->absolute);
+	free(in->link);
+	free(in->relative);
+}
