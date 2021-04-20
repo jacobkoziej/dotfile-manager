@@ -17,10 +17,7 @@
  */
 
 #include "config.h"
-#include "path.h"
 
-#include <getopt.h>
-#include <stdbool.h>
 #include <stdlib.h>
 
 
@@ -34,32 +31,8 @@ int main(int argc, char **argv)
 	};
 
 
-	/* parse command-line arguments */
-	while (true) {
-		int opt, long_index;
-
-		char *flags = "s";
-		struct option long_flags[] = {
-			{"stow", no_argument, NULL, 's'},
-			{0, 0, 0, 0}
-		};
-
-		opt = getopt_long(argc, argv, flags, long_flags, &long_index);
-
-		if (opt == -1) break;  // no more flags
-
-		switch (opt) {
-			// stow
-			case 's':
-				options.mode = opt;
-				break;
-
-			// invalid option
-			case '?':
-			default:
-				return EXIT_FAILURE;
-		}
-	}
+	/* load user options */
+	if (!config_getopt(&options, argc, argv)) return EXIT_FAILURE;
 
 
 	return EXIT_SUCCESS;

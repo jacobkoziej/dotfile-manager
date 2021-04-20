@@ -28,4 +28,7 @@ typedef struct config_s {
 	char    mode;
 } config_t;
 
+
+int config_getopt(config_t *in, int argc, char **argv);
+
 #endif /* CONFIG_H */

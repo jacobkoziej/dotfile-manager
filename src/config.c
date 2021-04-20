@@ -17,3 +17,51 @@
  */
 
 #include "config.h"
+
+#include <assert.h>
+#include <getopt.h>
+#include <stdbool.h>
+
+
+/* load command-line arguments */
+int config_getopt(config_t *in, int argc, char **argv)
+{
+	assert(in   != NULL);
+	assert(argv != NULL);
+
+
+	/* available flags */
+	char *flags = "s";
+	struct option long_flags[] = {
+		{"stow", no_argument, NULL, 's'},
+		{0, 0, 0, 0}
+	};
+
+	config_t temp = *in;
+
+
+	/* parse args */
+	while (true) {
+		int opt, long_index;
+
+		opt = getopt_long(argc, argv, flags, long_flags, &long_index);
+
+		if (opt == -1) break;  // no more flags
+
+		switch (opt) {
+			// stow
+			case 's':
+				temp.mode = opt;
+				break;
+
+			// invalid option
+			case '?':
+			default:
+				return 0;
+		}
+	}
+
+
+	*in = temp;
+	return 1;
+}
