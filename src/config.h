@@ -29,6 +29,7 @@ typedef struct config_s {
 } config_t;
 
 
-int config_getopt(config_t *in, int argc, char **argv);
+int  config_getopt(config_t *in, int argc, char **argv);
+void config_free(config_t *in);
 
 #endif /* CONFIG_H */

@@ -95,3 +95,14 @@ error:
 
 	return 0;
 }
+
+/* free members of config structure */
+void config_free(config_t *in)
+{
+	if(!in) return;
+
+	for (int i = 0; i < in->path_cnt; i++) {
+		path_del(&in->paths[i]);
+	}
+	free(in->paths);
+}
