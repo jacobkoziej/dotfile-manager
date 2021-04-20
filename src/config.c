@@ -17,6 +17,7 @@
  */
 
 #include "config.h"
+#include "path.h"
 
 #include <assert.h>
 #include <getopt.h>
@@ -28,6 +29,8 @@ int config_getopt(config_t *in, int argc, char **argv)
 {
 	assert(in   != NULL);
 	assert(argv != NULL);
+	assert(in->path_cnt == 0);
+	assert(in->paths    == NULL);
 
 
 	/* available flags */
@@ -37,7 +40,10 @@ int config_getopt(config_t *in, int argc, char **argv)
 		{0, 0, 0, 0}
 	};
 
+
+	/* cleanup sanity */
 	config_t temp = *in;
+	int path_init_cnt = 0;
 
 
 	/* parse args */
@@ -62,6 +68,30 @@ int config_getopt(config_t *in, int argc, char **argv)
 	}
 
 
+	/* parse path arguments */
+	if (optind != argc) {
+		temp.path_cnt = argc - optind;
+		temp.paths = malloc(sizeof(path_t) * temp.path_cnt);
+		if (!temp.paths) goto error;
+	}
+
+	for (int i = 0; i < temp.path_cnt; i++) {
+		if (path_init(argv[optind], &temp.paths[i])) {
+			++path_init_cnt;
+			++optind;
+		} else goto error;
+	}
+
+
 	*in = temp;
 	return 1;
+
+
+error:
+	for (int i = 0; i < path_init_cnt; i++) {
+		path_del(&temp.paths[i]);
+	}
+	free(temp.paths);
+
+	return 0;
 }
