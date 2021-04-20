@@ -26,6 +26,8 @@ typedef struct config_s {
 	int     path_cnt;
 	path_t *paths;
 	char    mode;
+	char   *base_dir;
+	char   *stow_dir;
 } config_t;
 
 
