@@ -23,8 +23,8 @@
 
 
 typedef struct config_s {
-	int     file_cnt;
-	path_t *files;
+	int     path_cnt;
+	path_t *paths;
 	char    mode;
 } config_t;
 

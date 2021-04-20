@@ -25,8 +25,8 @@ int main(int argc, char **argv)
 {
 	/* initial options */
 	config_t options = {
-		.file_cnt = 0,
-		.files    = NULL,
+		.path_cnt = 0,
+		.paths    = NULL,
 		.mode     = '\0'
 	};
 
