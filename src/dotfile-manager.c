@@ -26,8 +26,8 @@ int main(int argc, char **argv)
 	/* load user options */
 	config_t *options = config_init(".dotfiles");
 	if (!options) return EXIT_FAILURE;
-	if (!config_getopt(options, argc, argv)) return EXIT_FAILURE;
-	if (!config_paths(options)) return EXIT_FAILURE;
+	if (!config_getopt(options, argc, argv)) goto error;
+	if (!config_paths(options)) goto error;
 
 
 	/* cleanup */
@@ -36,4 +36,11 @@ int main(int argc, char **argv)
 
 
 	return EXIT_SUCCESS;
+
+
+error:
+	config_free(options);
+	options = NULL;
+
+	return EXIT_FAILURE;
 }
