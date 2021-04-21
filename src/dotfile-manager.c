@@ -29,5 +29,10 @@ int main(int argc, char **argv)
 	if (!config_getopt(options, argc, argv)) return EXIT_FAILURE;
 
 
+	/* cleanup */
+	config_free(options);
+	options = NULL;
+
+
 	return EXIT_SUCCESS;
 }
