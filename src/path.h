@@ -41,6 +41,7 @@ typedef struct path_s {
 
 char *path_rel(char *to, char *from);
 char *path_sub(char *path, char *patt, char *sub);
+int   path_dir_check(char *path);
 int   path_init(char *path, path_t *in);
 int   path_mkdir(char *path, mode_t mode);
 void  path_del(path_t *in);
