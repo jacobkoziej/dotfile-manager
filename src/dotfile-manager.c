@@ -23,16 +23,10 @@
 
 int main(int argc, char **argv)
 {
-	/* initial options */
-	config_t options = {
-		.path_cnt = 0,
-		.paths    = NULL,
-		.mode     = '\0'
-	};
-
-
 	/* load user options */
-	if (!config_getopt(&options, argc, argv)) return EXIT_FAILURE;
+	config_t *options = config_init(".dotfiles");
+	if (!options) return EXIT_FAILURE;
+	if (!config_getopt(options, argc, argv)) return EXIT_FAILURE;
 
 
 	return EXIT_SUCCESS;

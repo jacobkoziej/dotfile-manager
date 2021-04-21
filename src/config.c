@@ -22,7 +22,45 @@
 #include <assert.h>
 #include <getopt.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 
+
+/* initialize configuration structure */
+config_t *config_init(char *stow_dir)
+{
+	char *home_env = getenv("HOME");
+	if (!home_env) return NULL;
+
+	config_t *temp = malloc(sizeof(config_t));
+	if (!temp) return NULL;
+
+	temp->path_cnt = 0;
+	temp->paths    = NULL;
+	temp->mode     = '\0';
+	temp->base_dir = NULL;
+	temp->stow_dir = NULL;
+
+
+	temp->base_dir = strdup(home_env);
+	if (!temp->base_dir) goto error;
+
+	// +2 for '/' and '\0'
+	temp->stow_dir = malloc(strlen(home_env) + strlen(stow_dir) + 2);
+	if (!temp->stow_dir) goto error;
+
+	strcat(temp->stow_dir, home_env);
+	strcat(temp->stow_dir, "/");
+	strcat(temp->stow_dir, stow_dir);
+
+	return temp;
+
+error:
+	if (temp->base_dir) free(temp->base_dir);
+	free(temp);
+
+	return NULL;
+}
 
 /* load command-line arguments */
 int config_getopt(config_t *in, int argc, char **argv)
