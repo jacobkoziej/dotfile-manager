@@ -135,6 +135,8 @@ int path_mkdir(char *path, mode_t mode)
 {
 	assert (path != NULL);
 
+	struct stat info;
+
 	char *path_cp = strdup(path);
 	if (!path_cp) goto error;
 
@@ -142,14 +144,13 @@ int path_mkdir(char *path, mode_t mode)
 		*c = '\0';
 
 		// check if dir doesn't exist or valid existing dir
-		struct stat info;
 		if (lstat(path_cp, &info)) {
-			if (mkdir(path_cp, mode))  goto error;
+			if (mkdir(path_cp, mode)) goto error;
 		} else if (!S_ISDIR(info.st_mode)) goto error;
 
 		*c = '/';
 	}
-	if (mkdir(path_cp, mode)) goto error;
+	if (lstat(path_cp, &info) && mkdir(path_cp, mode)) goto error;
 
 	free(path_cp);
 	return 1;
