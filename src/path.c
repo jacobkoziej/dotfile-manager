@@ -24,7 +24,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <unistd.h>
 
 
 /* get a relative path from an absolute path */
@@ -106,15 +105,27 @@ int path_init(char *path, path_t *in)
 
 	path_t temp = {
 		.proccess  = false,
+		.type      = '\0',
 		.input     = NULL,
 		.absolute  = NULL,
 		.relative  = NULL,
 	};
 
+	struct stat info;
+	if (!lstat(path, &info)) {
+		if (S_ISREG(info.st_mode)) {
+			temp.proccess = true;
+			temp.type = 'f';
+		} else if (S_ISDIR(info.st_mode)) {
+			temp.proccess = true;
+			temp.type = 'd';
+		} else if (S_ISLNK(info.st_mode)) {
+			temp.type = 'l';
+		}
+	}
+
 	temp.input = strdup(path);
 	if (!temp.input) return 0;
-
-	temp.proccess = access(path, F_OK) ? false : true;
 
 	*in = temp;
 	return 1;
