@@ -29,6 +29,9 @@
 /* initialize configuration structure */
 config_t *config_init(char *stow_dir)
 {
+	char *norm_base = NULL;
+	char *norm_stow = NULL;
+
 	char *home_env = getenv("HOME");
 	if (!home_env) return NULL;
 
@@ -55,11 +58,29 @@ config_t *config_init(char *stow_dir)
 	strcat(temp->stow_dir, "/");
 	strcat(temp->stow_dir, stow_dir);
 
+
+	/* normalize paths */
+	norm_base = path_abs(temp->base_dir);
+	if (!norm_base) goto error;
+	free(temp->base_dir);
+	temp->base_dir = norm_base;
+	norm_base = NULL;
+
+	norm_stow = path_abs(temp->stow_dir);
+	if (!norm_stow) goto error;
+	free(temp->stow_dir);
+	temp->stow_dir = norm_stow;
+	norm_stow = NULL;
+
 	return temp;
 
 error:
 	if (temp->base_dir) free(temp->base_dir);
+	if (temp->stow_dir) free(temp->stow_dir);
 	free(temp);
+
+	if (norm_base) free(norm_base);
+	if (norm_stow) free(norm_stow);
 
 	return NULL;
 }
