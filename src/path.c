@@ -54,7 +54,10 @@ char *path_rel(char *to, char *from)
 		if (from[i] == '/') ++dir_cnt;
 	}
 
-	char *output = malloc(strlen(to) + (strlen("../") * dir_cnt) + 1);
+	char *output = calloc(
+		strlen(to) + (strlen("../") * dir_cnt) + 1,
+		sizeof(char)
+	);
 	if (!output) return NULL;
 
 	for (int i = 0; i < dir_cnt; i++) {
@@ -83,7 +86,10 @@ char *path_sub(char *path, char *patt, char *sub)
 		}
 	}
 
-	char *out_path = malloc(strlen(path + offset) + strlen(sub) + 1);
+	char *out_path = calloc(
+		strlen(path + offset) + strlen(sub) + 1,
+		sizeof(char)
+	);
 	if (!out_path) return NULL;
 
 	strcat(out_path, sub);

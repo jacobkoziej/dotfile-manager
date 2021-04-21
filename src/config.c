@@ -45,8 +45,10 @@ config_t *config_init(char *stow_dir)
 	temp->base_dir = strdup(home_env);
 	if (!temp->base_dir) goto error;
 
-	// +2 for '/' and '\0'
-	temp->stow_dir = malloc(strlen(home_env) + strlen(stow_dir) + 2);
+	temp->stow_dir = calloc(
+		strlen(home_env) + strlen(stow_dir) + 2,  // +2 for '/' & '\0'
+		sizeof(char)
+	);
 	if (!temp->stow_dir) goto error;
 
 	strcat(temp->stow_dir, home_env);
