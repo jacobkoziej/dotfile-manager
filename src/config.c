@@ -34,6 +34,7 @@ config_t *config_init(char *stow_dir)
 
 	char *home_env = getenv("HOME");
 	if (!home_env) return NULL;
+	if (!path_mkdir(home_env, 0777)) return NULL;
 
 	config_t *temp = malloc(sizeof(config_t));
 	if (!temp) return NULL;
@@ -57,6 +58,8 @@ config_t *config_init(char *stow_dir)
 	strcat(temp->stow_dir, home_env);
 	strcat(temp->stow_dir, "/");
 	strcat(temp->stow_dir, stow_dir);
+
+	if (!path_mkdir(temp->stow_dir, 0777)) goto error;
 
 
 	/* normalize paths */
