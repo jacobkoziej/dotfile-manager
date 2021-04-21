@@ -148,6 +148,14 @@ int path_mkdir(char *path, mode_t mode)
 {
 	assert (path != NULL);
 
+	switch (path_dir_check(path)) {
+		case 0: break;
+		case 1: return 1;
+
+		case -1:
+		default: return 0;
+	}
+
 	struct stat info;
 
 	char *path_cp = strdup(path);
