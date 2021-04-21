@@ -136,6 +136,56 @@ error:
 	return 0;
 }
 
+/* generate paths */
+int config_paths(config_t *in)
+{
+	int i = 0;
+	while (i < in->path_cnt) {
+		if (in->paths[i].proccess) {
+			in->paths[i].absolute = path_abs(in->paths[i].input);
+			if (!in->paths[i].absolute) goto error;
+
+			in->paths[i].link = path_sub(
+				in->paths[i].absolute,
+				in->base_dir,
+				in->stow_dir
+			);
+			if (!in->paths[i].link) goto error;
+
+			in->paths[i].relative = path_rel(
+				in->paths[i].link,
+				in->paths[i].absolute
+			);
+			if (!in->paths[i].relative) goto error;
+		}
+		++i;
+	}
+
+	return 1;
+
+error:
+	while (i >= 0) {
+		if (in->paths[i].absolute) {
+			free(in->paths[i].absolute);
+			in->paths[i].absolute = NULL;
+		}
+
+		if (in->paths[i].link) {
+			free(in->paths[i].link);
+			in->paths[i].link = NULL;
+		}
+
+		if (in->paths[i].relative) {
+			free(in->paths[i].relative);
+			in->paths[i].relative = NULL;
+		}
+
+		--i;
+	}
+
+	return 0;
+}
+
 /* free configuration structure */
 void config_free(config_t *in)
 {

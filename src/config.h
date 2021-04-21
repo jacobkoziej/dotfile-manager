@@ -33,6 +33,7 @@ typedef struct config_s {
 
 config_t *config_init(char *stow_dir);
 int       config_getopt(config_t *in, int argc, char **argv);
+int       config_paths(config_t *in);
 void      config_free(config_t *in);
 
 #endif /* CONFIG_H */
