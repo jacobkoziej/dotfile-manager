@@ -1,5 +1,5 @@
 /*
- * path.h -- file path manipulation
+ * path_private.h -- file path manipulation
  * Copyright (C) 2021  Jacob Koziej <jacobkoziej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,33 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef PATH_H
-#define PATH_H
+#ifndef PATH_PRIVATE_H
+#define PATH_PRIVATE_H
 
-#define _GNU_SOURCE
-
-#include <stdbool.h>
-#include <stdlib.h>
-#include <sys/stat.h>
+#include "path.h"
 
 
-#define path_abs(path) canonicalize_file_name(path)
+static int dir_check(char *path);
 
-
-typedef struct path_s {
-	bool proccess;
-	char type;
-	char *input;
-	char *absolute;
-	char *link;
-	char *relative;
-} path_t;
-
-
-char *path_rel(char *to, char *from);
-char *path_sub(char *path, char *patt, char *sub);
-int   path_init(char *path, path_t *in);
-int   path_mkdir(char *path, mode_t mode);
-void  path_del(path_t *in);
-
-#endif /* PATH_H */
+#endif /* PATH_PRIVATE_H */

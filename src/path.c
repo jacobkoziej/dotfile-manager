@@ -17,6 +17,7 @@
  */
 
 #include "path.h"
+#include "path_private.h"
 
 #include <assert.h>
 #include <errno.h>
@@ -96,19 +97,6 @@ char *path_sub(char *path, char *patt, char *sub)
 	return out_path;
 }
 
-/* check if a folder exists */
-int path_dir_check(char *path)
-{
-	struct stat info;
-
-	// doesn't exist
-	if (lstat(path, &info)) return 0;
-
-	// check if it's a directory
-	if (S_ISDIR(info.st_mode)) return 1;
-	else return -1;
-}
-
 /* initialize a path structure */
 int path_init(char *path, path_t *in)
 {
@@ -148,7 +136,7 @@ int path_mkdir(char *path, mode_t mode)
 {
 	assert (path != NULL);
 
-	switch (path_dir_check(path)) {
+	switch (dir_check(path)) {
 		case 0: break;
 		case 1: return 1;
 
@@ -190,4 +178,17 @@ void path_del(path_t *in)
 	free(in->absolute);
 	free(in->link);
 	free(in->relative);
+}
+
+/* check if a folder exists */
+static int dir_check(char *path)
+{
+	struct stat info;
+
+	// doesn't exist
+	if (lstat(path, &info)) return 0;
+
+	// check if it's a directory
+	if (S_ISDIR(info.st_mode)) return 1;
+	else return -1;
 }
