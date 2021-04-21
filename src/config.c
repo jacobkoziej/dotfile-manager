@@ -139,8 +139,10 @@ void config_free(config_t *in)
 {
 	if(!in) return;
 
-	for (int i = 0; i < in->path_cnt; i++) {
-		path_del(&in->paths[i]);
+	if (in->paths) {
+		for (int i = 0; i < in->path_cnt; i++) {
+			path_del(&in->paths[i]);
+		}
+		free(in->paths);
 	}
-	free(in->paths);
 }
