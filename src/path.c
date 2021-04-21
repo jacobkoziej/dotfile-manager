@@ -19,7 +19,6 @@
 #include "path.h"
 
 #include <assert.h>
-#include <dirent.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -141,12 +140,13 @@ int path_mkdir(char *path, mode_t mode)
 
 	for (char *c = strchr(path_cp + 1, '/'); c; c = strchr(c + 1, '/')) {
 		*c = '\0';
-		DIR *dir = opendir(path_cp);
 
-		if (!dir && errno == ENOENT)  // dir doesn't exist
-			if (mkdir(path_cp, mode)) goto error;
+		// check if dir doesn't exist or valid existing dir
+		struct stat info;
+		if (lstat(path_cp, &info)) {
+			if (mkdir(path_cp, mode))  goto error;
+		} else if (!S_ISDIR(info.st_mode)) goto error;
 
-		closedir(dir);
 		*c = '/';
 	}
 	if (mkdir(path_cp, mode)) goto error;
