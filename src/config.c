@@ -145,4 +145,7 @@ void config_free(config_t *in)
 		}
 		free(in->paths);
 	}
+
+	if (in->base_dir) free(in->base_dir);
+	if (in->stow_dir) free(in->stow_dir);
 }
