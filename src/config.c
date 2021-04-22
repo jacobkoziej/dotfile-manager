@@ -125,6 +125,8 @@ error:
 /* generate paths */
 int config_paths(config_t *in)
 {
+	if (!in) return -1;
+
 	int i = 0;
 	while (i < in->path_cnt) {
 		if (in->paths[i].proccess) {
@@ -193,6 +195,8 @@ void config_free(config_t *in)
 /* load any non-overwritten defaults */
 int config_set_defaults(config_t *in)
 {
+	if (!in) return -1;
+
 	char *tmp_base = NULL;
 	char *tmp_stow = NULL;
 
