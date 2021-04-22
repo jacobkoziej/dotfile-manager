@@ -48,6 +48,9 @@ int config_getopt(config_t *in, int argc, char **argv)
 	assert(argv != NULL);
 	assert(in->path_cnt == 0);
 	assert(in->paths    == NULL);
+	assert(in->mode     == '\0');
+	assert(in->base_dir == NULL);
+	assert(in->stow_dir == NULL);
 
 
 	/* available flags */
@@ -59,7 +62,6 @@ int config_getopt(config_t *in, int argc, char **argv)
 
 
 	/* cleanup sanity */
-	config_t temp = *in;
 	int path_init_cnt = 0;
 
 
@@ -74,7 +76,7 @@ int config_getopt(config_t *in, int argc, char **argv)
 		switch (opt) {
 			// stow
 			case 's':
-				temp.mode = opt;
+				in->mode = opt;
 				break;
 
 			// invalid option
@@ -87,28 +89,35 @@ int config_getopt(config_t *in, int argc, char **argv)
 
 	/* parse path arguments */
 	if (optind != argc) {
-		temp.path_cnt = argc - optind;
-		temp.paths = malloc(sizeof(path_t) * temp.path_cnt);
-		if (!temp.paths) goto error;
+		in->path_cnt = argc - optind;
+		in->paths = malloc(sizeof(path_t) * in->path_cnt);
+		if (!in->paths) goto error;
 	}
 
-	for (int i = 0; i < temp.path_cnt; i++) {
-		if (path_init(argv[optind], &temp.paths[i])) {
+	for (int i = 0; i < in->path_cnt; i++) {
+		if (path_init(argv[optind], &in->paths[i])) {
 			++path_init_cnt;
 			++optind;
 		} else goto error;
 	}
 
-
-	*in = temp;
 	return 1;
 
-
 error:
+	// path_init_cnt always zero if in->paths == NULL
 	for (int i = 0; i < path_init_cnt; i++) {
-		path_del(&temp.paths[i]);
+		path_del(&in->paths[i]);
 	}
-	free(temp.paths);
+
+	if (in->paths)    free(in->paths);
+	if (in->base_dir) free(in->base_dir);
+	if (in->stow_dir) free(in->stow_dir);
+
+	in->path_cnt = 0;
+	in->paths    = NULL;
+	in->mode     = '\0';
+	in->base_dir = NULL;
+	in->stow_dir = NULL;
 
 	return 0;
 }
