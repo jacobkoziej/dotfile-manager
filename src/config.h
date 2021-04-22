@@ -22,6 +22,9 @@
 #include "path.h"
 
 
+# define DEFAULT_STOW_DIR ".dotfiles"
+
+
 typedef struct config_s {
 	int     path_cnt;
 	path_t *paths;
@@ -31,9 +34,10 @@ typedef struct config_s {
 } config_t;
 
 
-config_t *config_init(char *stow_dir);
+config_t *config_init(void);
 int       config_getopt(config_t *in, int argc, char **argv);
 int       config_paths(config_t *in);
+int       config_set_defaults(config_t *in);
 void      config_free(config_t *in);
 
 #endif /* CONFIG_H */

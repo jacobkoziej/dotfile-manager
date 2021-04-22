@@ -24,9 +24,10 @@
 int main(int argc, char **argv)
 {
 	/* load user options */
-	config_t *options = config_init(".dotfiles");
+	config_t *options = config_init();
 	if (!options) return EXIT_FAILURE;
 	if (!config_getopt(options, argc, argv)) goto error;
+	if (!config_set_defaults(options)) goto error;
 	if (!config_paths(options)) goto error;
 
 

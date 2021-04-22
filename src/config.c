@@ -27,65 +27,18 @@
 
 
 /* initialize configuration structure */
-config_t *config_init(char *stow_dir)
+config_t *config_init(void)
 {
-	char *norm_base = NULL;
-	char *norm_stow = NULL;
+	config_t *tmp = malloc(sizeof(config_t));
+	if (!tmp) return NULL;
 
-	char *home_env = getenv("HOME");
-	if (!home_env) return NULL;
-	if (!path_mkdir(home_env, 0777)) return NULL;
+	tmp->path_cnt = 0;
+	tmp->paths    = NULL;
+	tmp->mode     = '\0';
+	tmp->base_dir = NULL;
+	tmp->stow_dir = NULL;
 
-	config_t *temp = malloc(sizeof(config_t));
-	if (!temp) return NULL;
-
-	temp->path_cnt = 0;
-	temp->paths    = NULL;
-	temp->mode     = '\0';
-	temp->base_dir = NULL;
-	temp->stow_dir = NULL;
-
-
-	temp->base_dir = strdup(home_env);
-	if (!temp->base_dir) goto error;
-
-	temp->stow_dir = calloc(
-		strlen(home_env) + strlen(stow_dir) + 2,  // +2 for '/' & '\0'
-		sizeof(char)
-	);
-	if (!temp->stow_dir) goto error;
-
-	strcat(temp->stow_dir, home_env);
-	strcat(temp->stow_dir, "/");
-	strcat(temp->stow_dir, stow_dir);
-
-	if (!path_mkdir(temp->stow_dir, 0777)) goto error;
-
-
-	/* normalize paths */
-	norm_base = path_abs(temp->base_dir);
-	if (!norm_base) goto error;
-	free(temp->base_dir);
-	temp->base_dir = norm_base;
-	norm_base = NULL;
-
-	norm_stow = path_abs(temp->stow_dir);
-	if (!norm_stow) goto error;
-	free(temp->stow_dir);
-	temp->stow_dir = norm_stow;
-	norm_stow = NULL;
-
-	return temp;
-
-error:
-	if (temp->base_dir) free(temp->base_dir);
-	if (temp->stow_dir) free(temp->stow_dir);
-	free(temp);
-
-	if (norm_base) free(norm_base);
-	if (norm_stow) free(norm_stow);
-
-	return NULL;
+	return tmp;
 }
 
 /* load command-line arguments */
@@ -226,4 +179,53 @@ void config_free(config_t *in)
 	if (in->stow_dir) free(in->stow_dir);
 
 	free(in);
+}
+
+/* load any non-overwritten defaults */
+int config_set_defaults(config_t *in)
+{
+	char *tmp_base = NULL;
+	char *tmp_stow = NULL;
+
+	if (!in->base_dir) {
+		char *home_env = getenv("HOME");
+		if (!home_env) goto error;
+
+		tmp_base = strdup(home_env);
+		if (!tmp_base) goto error;
+		in->base_dir = tmp_base;
+	}
+
+	if (!in->stow_dir) {
+		size_t path_len = (
+			strlen(in->base_dir) +
+			strlen(DEFAULT_STOW_DIR) + 2
+			// +2 for '/' and '\0'
+		);
+		char path[path_len];
+		memset(path, '\0', path_len);
+
+		strcat(path, in->base_dir);
+		strcat(path, "/");
+		strcat(path, DEFAULT_STOW_DIR);
+
+		tmp_stow = strdup(path);
+		if (!tmp_stow) goto error;
+		in->stow_dir = tmp_stow;
+	}
+
+	return 1;
+
+error:
+	if (tmp_base) {
+		free(tmp_base);
+		in->base_dir = NULL;
+	}
+
+	if (tmp_stow) {
+		free(tmp_stow);
+		in->stow_dir = NULL;
+	}
+
+	return 0;
 }
