@@ -17,3 +17,19 @@
  */
 
 #include "msg.h"
+
+#include <stdarg.h>
+#include <stdio.h>
+
+
+/* print a warning message */
+int msg_warn(char *format, ...)
+{
+	va_list args;
+	va_start(args, format);
+
+	int err = vfprintf(stderr, format, args);
+
+	va_end(args);
+	return (err >= 0);
+}

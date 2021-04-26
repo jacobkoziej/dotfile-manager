@@ -20,4 +20,6 @@
 #define MSG_H
 
 
+int msg_warn(char *format, ...);
+
 #endif /* MSG_H */
