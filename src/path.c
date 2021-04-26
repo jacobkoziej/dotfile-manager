@@ -117,7 +117,6 @@ int path_init(char *path, path_t *in)
 			temp.proccess = true;
 			temp.type = 'f';
 		} else if (S_ISDIR(info.st_mode)) {
-			temp.proccess = true;
 			temp.type = 'd';
 		} else if (S_ISLNK(info.st_mode)) {
 			temp.type = 'l';
