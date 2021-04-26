@@ -28,8 +28,9 @@ int msg_warn(char *format, ...)
 	va_list args;
 	va_start(args, format);
 
-	int err = vfprintf(stderr, format, args);
+	fprintf(stderr, "warning: ");
+	vfprintf(stderr, format, args);
 
 	va_end(args);
-	return (err >= 0);
+	return 1;
 }
