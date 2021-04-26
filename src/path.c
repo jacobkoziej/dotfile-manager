@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "msg.h"
 #include "path.h"
 #include "path_private.h"
 
@@ -117,9 +118,13 @@ int path_init(char *path, path_t *in)
 			temp.proccess = true;
 			temp.type = 'f';
 		} else if (S_ISDIR(info.st_mode)) {
+			msg_warn("'%s' is a directory, ignoring\n", path);
 			temp.type = 'd';
 		} else if (S_ISLNK(info.st_mode)) {
+			msg_warn("'%s' is a symlink, ignoring\n", path);
 			temp.type = 'l';
+		} else {
+			msg_warn("'%s' is not a regular file, ignoring", path);
 		}
 	}
 
