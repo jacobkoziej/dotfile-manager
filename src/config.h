@@ -21,11 +21,16 @@
 
 #include "path.h"
 
+#include <stdbool.h>
+
 
 # define DEFAULT_STOW_DIR ".dotfiles"
 
 
 typedef struct config_s {
+	struct {
+		bool dry_run : 1;
+	} flags;
 	int     path_cnt;
 	path_t *paths;
 	char    mode;

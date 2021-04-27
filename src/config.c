@@ -32,6 +32,8 @@ config_t *config_init(void)
 	config_t *tmp = malloc(sizeof(config_t));
 	if (!tmp) return NULL;
 
+	tmp->flags.dry_run = false;
+
 	tmp->path_cnt = 0;
 	tmp->paths    = NULL;
 	tmp->mode     = '\0';
@@ -54,9 +56,10 @@ int config_getopt(config_t *in, int argc, char **argv)
 
 
 	/* available flags */
-	char *flags = "s";
+	char *flags = "ns";
 	struct option long_flags[] = {
-		{"stow", no_argument, NULL, 's'},
+		{"dry-run", no_argument, NULL, 'n'},
+		{   "stow", no_argument, NULL, 's'},
 		{0, 0, 0, 0}
 	};
 
@@ -74,6 +77,11 @@ int config_getopt(config_t *in, int argc, char **argv)
 		if (opt == -1) break;  // no more flags
 
 		switch (opt) {
+			// dry run
+			case 'n':
+				in->flags.dry_run = true;
+				break;
+
 			// stow
 			case 's':
 				in->mode = opt;
