@@ -31,6 +31,7 @@ typedef struct config_s {
 	char mode;
 	struct {
 		bool dry_run : 1;
+		bool force   : 1;
 	} flags;
 
 	int     path_cnt;

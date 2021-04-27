@@ -34,6 +34,7 @@ config_t *config_init(void)
 
 	tmp->mode          = '\0';
 	tmp->flags.dry_run = false;
+	tmp->flags.force   = false;
 
 	tmp->path_cnt = 0;
 	tmp->paths    = NULL;
@@ -57,8 +58,9 @@ int config_getopt(config_t *in, int argc, char **argv)
 
 
 	/* available flags */
-	char *flags = "ns";
+	char *flags = "fns";
 	struct option long_flags[] = {
+		{  "force", no_argument, NULL, 'f'},
 		{"dry-run", no_argument, NULL, 'n'},
 		{   "stow", no_argument, NULL, 's'},
 		{0, 0, 0, 0}
@@ -78,6 +80,11 @@ int config_getopt(config_t *in, int argc, char **argv)
 		if (opt == -1) break;  // no more flags
 
 		switch (opt) {
+			// force
+			case 'f':
+				in->flags.force = true;
+				break;
+
 			// dry run
 			case 'n':
 				in->flags.dry_run = true;
@@ -124,6 +131,7 @@ error:
 
 	in->mode          = '\0';
 	in->flags.dry_run = false;
+	in->flags.force   = false;
 
 	in->path_cnt = 0;
 	in->paths    = NULL;
