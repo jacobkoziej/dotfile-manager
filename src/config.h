@@ -28,14 +28,16 @@
 
 
 typedef struct config_s {
+	char mode;
 	struct {
 		bool dry_run : 1;
 	} flags;
+
 	int     path_cnt;
 	path_t *paths;
-	char    mode;
-	char   *base_dir;
-	char   *stow_dir;
+
+	char *base_dir;
+	char *stow_dir;
 } config_t;
 
 

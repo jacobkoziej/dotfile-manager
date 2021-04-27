@@ -32,11 +32,12 @@ config_t *config_init(void)
 	config_t *tmp = malloc(sizeof(config_t));
 	if (!tmp) return NULL;
 
+	tmp->mode          = '\0';
 	tmp->flags.dry_run = false;
 
 	tmp->path_cnt = 0;
 	tmp->paths    = NULL;
-	tmp->mode     = '\0';
+
 	tmp->base_dir = NULL;
 	tmp->stow_dir = NULL;
 
@@ -48,9 +49,9 @@ int config_getopt(config_t *in, int argc, char **argv)
 {
 	assert(in   != NULL);
 	assert(argv != NULL);
+	assert(in->mode     == '\0');
 	assert(in->path_cnt == 0);
 	assert(in->paths    == NULL);
-	assert(in->mode     == '\0');
 	assert(in->base_dir == NULL);
 	assert(in->stow_dir == NULL);
 
@@ -121,9 +122,9 @@ error:
 	if (in->base_dir) free(in->base_dir);
 	if (in->stow_dir) free(in->stow_dir);
 
+	in->mode     = '\0';
 	in->path_cnt = 0;
 	in->paths    = NULL;
-	in->mode     = '\0';
 	in->base_dir = NULL;
 	in->stow_dir = NULL;
 
