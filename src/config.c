@@ -122,7 +122,9 @@ error:
 	if (in->base_dir) free(in->base_dir);
 	if (in->stow_dir) free(in->stow_dir);
 
-	in->mode     = '\0';
+	in->mode          = '\0';
+	in->flags.dry_run = false;
+
 	in->path_cnt = 0;
 	in->paths    = NULL;
 	in->base_dir = NULL;
