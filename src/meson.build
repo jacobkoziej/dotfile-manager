@@ -15,6 +15,7 @@
 
 dots_sources = files(
   'dotfile-manager.c',
+  'action.c',
   'config.c',
   'msg.c',
   'path.c'
