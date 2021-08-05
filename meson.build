@@ -19,6 +19,13 @@ project(
         'c',
         version : '0.1.2',
         license : 'GPL-3.0-or-later',
+        default_options : [
+                # core options
+                'warning_level=3',
+                'werror=true',
+                # compiler options
+                'c_std=gnu18',
+        ],
 )
 
 
