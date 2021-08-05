@@ -23,6 +23,11 @@ dotfile_manager_inc = include_directories('.')
 
 dotfile_manager_conf_data = configuration_data()
 
+dotfile_manager_conf_data.set(
+        'program-name',
+        get_option('program-name'),
+)
+
 
 configure_file(
         input         : 'config.h.in',
