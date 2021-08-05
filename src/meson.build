@@ -28,6 +28,11 @@ dotfile_manager_conf_data.set(
         get_option('program-name'),
 )
 
+dotfile_manager_conf_data.set(
+        'program-version',
+        meson.project_version(),
+)
+
 
 configure_file(
         input         : 'config.h.in',
