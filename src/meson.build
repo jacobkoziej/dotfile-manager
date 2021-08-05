@@ -17,3 +17,25 @@
 dotfile_manager_sources = files(
         'dotfile-manager.c',
 )
+
+dotfile_manager_inc = include_directories('.')
+
+
+dotfile_manager_conf_data = configuration_data()
+
+dotfile_manager_conf_data.set(
+        'program-name',
+        get_option('program-name'),
+)
+
+dotfile_manager_conf_data.set(
+        'program-version',
+        meson.project_version(),
+)
+
+
+configure_file(
+        input         : 'config.h.in',
+        output        : 'config.h',
+        configuration : dotfile_manager_conf_data,
+)

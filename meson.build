@@ -34,6 +34,7 @@ subdir('src')
 
 executable(
         get_option('program-name'),
-        sources : dotfile_manager_sources,
+        sources             : dotfile_manager_sources,
+        include_directories : dotfile_manager_inc,
         install : true,
 )
