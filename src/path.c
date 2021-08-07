@@ -17,3 +17,58 @@
  */
 
 #include "path.h"
+
+#include <assert.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+/*
+ * Generate a relative path from an absolute source to an absolute destination.
+ */
+char *path_relative(char *src, char *dst)
+{
+	assert(src);
+	assert(dst);
+
+
+	char   *buf     = NULL;
+	int     dir_lvl = 0;
+	size_t  src_len = 0;
+	char   *start   = src;  // so we don't backtrack past our start
+
+
+	// remove the shared path
+	while ((*src == *dst) && *src && *dst) {
+		++src; ++dst;
+	}
+
+	// strip only up only up to the directory name
+	while ((*src != '/') && (src >= start)) {
+		--src; --dst;
+	}
+
+	// strip '/'
+	++src; ++dst;
+
+	src_len = strlen(src);
+	for (size_t i = 0; i < src_len; i++) {
+		if (src[i] == '/') ++dir_lvl;
+	}
+
+
+	buf = calloc(
+		strlen(dst) + (strlen("../") * dir_lvl) + 1,
+		sizeof(char)
+	);
+	if (!buf) return NULL;
+
+	for (int i = 0; i < dir_lvl; i++) {
+		strcat(buf, "../");
+	}
+	strcat(buf, dst);
+
+
+	return buf;
+}

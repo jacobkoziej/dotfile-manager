@@ -20,4 +20,7 @@
 #define DOTFILE_MANAGER_PATH
 
 
+char *path_relative(char *src, char *dst);
+
+
 #endif /* DOTFILE_MANAGER_PATH */
