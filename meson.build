@@ -32,6 +32,11 @@ project(
 subdir('src')
 
 
+add_global_arguments(
+        '-D_GNU_SOURCE',
+        language : 'c',
+)
+
 executable(
         get_option('program-name'),
         sources             : dotfile_manager_sources,
