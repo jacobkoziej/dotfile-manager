@@ -72,3 +72,38 @@ char *path_relative(char *src, char *dst)
 
 	return buf;
 }
+
+/*
+ * Substitute a pattern in a path with a substring.
+ */
+char *path_substitution(char *path, char *pat, char *sub)
+{
+	assert(path);
+	assert(pat);
+	assert(sub);
+
+
+	char   *buf     = NULL;
+	size_t  offset  = 0;
+	size_t  pat_len = strlen(pat);
+
+
+	// ensure pattern matches path
+	while (offset < pat_len) {
+		if (path[offset] == pat[offset]) ++offset;
+		else return NULL;
+	}
+	path += offset;
+
+	buf = calloc(
+		strlen(sub) + strlen(path) + 1,
+		sizeof(char)
+	);
+	if (!buf) return NULL;
+
+	strcat(buf, sub);
+	strcat(buf, path);
+
+
+	return buf;
+}
