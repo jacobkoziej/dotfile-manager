@@ -20,4 +20,11 @@
 #define DOTFILE_MANAGER_MACROS
 
 
+#include <stddef.h>
+#include <stdlib.h>
+
+
+#define FREE(x) if (x) { free(x); x = NULL; }
+
+
 #endif /* DOTFILE_MANAGER_MACROS */
