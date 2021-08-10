@@ -21,8 +21,8 @@
 
 
 char *path_full(char *path, char *wd);
-char *path_relative(char *src, char *dst);
-char *path_substitution(char *path, char *pat, char *sub);
+char *path_rel(char *src, char *dst);
+char *path_sub(char *path, char *pat, char *sub);
 
 
 #endif /* DOTFILE_MANAGER_PATH */

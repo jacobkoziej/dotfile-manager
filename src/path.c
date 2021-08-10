@@ -115,7 +115,7 @@ error:
 /*
  * Generate a relative path from an absolute source to an absolute destination.
  */
-char *path_relative(char *src, char *dst)
+char *path_rel(char *src, char *dst)
 {
 	assert(src);
 	assert(dst);
@@ -164,7 +164,7 @@ char *path_relative(char *src, char *dst)
 /*
  * Substitute a pattern in a path with a substring.
  */
-char *path_substitution(char *path, char *pat, char *sub)
+char *path_sub(char *path, char *pat, char *sub)
 {
 	assert(path);
 	assert(pat);
