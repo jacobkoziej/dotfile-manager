@@ -69,7 +69,7 @@ error:
 /*
  * Return the full file path.
  */
-char *path_full(char *path, char *wd)
+char *path_full(char *wd, char *path)
 {
 	/*
 	 * The existing implementation of realpath() in glibc dereferences
@@ -80,8 +80,8 @@ char *path_full(char *path, char *wd)
 	 * exists and/or consists of symlinks.
 	 */
 
-	assert(path);
 	assert(wd);
+	assert(path);
 
 
 	char *buf, *nul, *buf_lim = NULL;
