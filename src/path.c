@@ -46,7 +46,7 @@ char *path_full(char *path, char *wd)
 	assert(wd);
 
 
-	char *buf, *nil, *buf_lim = NULL;
+	char *buf, *nul, *buf_lim = NULL;
 	char *head, *tail = NULL;
 	size_t buf_siz = strlen(wd) + 1 + PATH_MAX;
 
@@ -58,7 +58,7 @@ char *path_full(char *path, char *wd)
 	if (!buf) return NULL;
 
 	strcpy(buf, wd);
-	nil = buf + buf_siz - PATH_MAX - 1;
+	nul = buf + buf_siz - PATH_MAX - 1;
 	buf_lim = buf + buf_siz;
 
 
@@ -76,19 +76,19 @@ char *path_full(char *path, char *wd)
 		if (diff == 1 && head[0] == '.') continue;
 		if (diff == 2 && head[0] == '.' && head[1] == '.') {
 			// go up to the previous path component (ignoring root)
-			if (nil > buf + 1) {
-				while ((--nil)[-1] != '/');
-				*nil = '\0';
+			if (nul > buf + 1) {
+				while ((--nul)[-1] != '/');
+				*nul = '\0';
 			}
 			continue;
 		}
 
 		// make sure we have a trailing '/'
-		if (nil[-1] != '/') *nil++ = '/';
+		if (nul[-1] != '/') *nul++ = '/';
 
 		// resize if necessary
-		if (nil + diff >= buf_lim) {
-			uintptr_t nil_offset = nil - buf;
+		if (nul + diff >= buf_lim) {
+			uintptr_t nul_offset = nul - buf;
 			char *buf_new = NULL;
 
 			buf_siz += (diff + 1 > PATH_MAX) ? diff + 1 : PATH_MAX;
@@ -98,11 +98,11 @@ char *path_full(char *path, char *wd)
 
 			buf = buf_new;
 			buf_lim = buf + buf_siz;
-			nil = buf + nil_offset;
+			nul = buf + nul_offset;
 		}
 
-		nil = mempcpy(nil, head, diff);
-		*nil = '\0';
+		nul = mempcpy(nul, head, diff);
+		*nul = '\0';
 	}
 
 	return buf;
