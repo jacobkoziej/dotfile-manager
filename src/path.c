@@ -19,14 +19,52 @@
 #include "path.h"
 
 #include <assert.h>
+#include <errno.h>
 #include <limits.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #include "macros.h"
 
+
+/*
+ * Create directories and parents directories as needed (no error if existing).
+ */
+int mkdirp(const char *path, mode_t mode)
+{
+	assert(path);
+
+
+	if (*path == '\0') return -1;
+
+	char *path_dup = strdup(path);
+	if (!path_dup) return -1;
+
+	struct stat st;
+
+
+	// generate all parents as necessary
+	for ( char *d = strchr(path_dup + 1, '/'); d; d = strchr(d + 1, '/')) {
+		*d = '\0';
+		if (mkdir(path_dup, mode) < 0 && errno != EEXIST) goto error;
+		*d = '/';
+	}
+	if (mkdir(path_dup, mode) < 0 && errno != EEXIST) goto error;
+
+	// make sure the last element is a directory
+	if (lstat(path_dup, &st) || !S_ISDIR(st.st_mode)) goto error;
+
+
+	FREE(path_dup);
+	return 0;
+
+error:
+	FREE(path_dup);
+	return -1;
+}
 
 /*
  * Return the full file path.

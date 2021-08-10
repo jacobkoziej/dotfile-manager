@@ -20,6 +20,10 @@
 #define DOTFILE_MANAGER_PATH
 
 
+#include <sys/stat.h>
+
+
+int   mkdirp(const char *path, mode_t mode);
 char *path_full(char *path, char *wd);
 char *path_rel(char *src, char *dst);
 char *path_sub(char *path, char *pat, char *sub);
