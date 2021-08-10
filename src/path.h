@@ -20,6 +20,7 @@
 #define DOTFILE_MANAGER_PATH
 
 
+char *path_full(char *path, char *wd);
 char *path_relative(char *src, char *dst);
 char *path_substitution(char *path, char *pat, char *sub);
 

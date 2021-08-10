@@ -19,10 +19,98 @@
 #include "path.h"
 
 #include <assert.h>
+#include <limits.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "macros.h"
+
+
+/*
+ * Return the full file path.
+ */
+char *path_full(char *path, char *wd)
+{
+	/*
+	 * The existing implementation of realpath() in glibc dereferences
+	 * symlinks by default and makes sure all elements exist.
+	 *
+	 * We don't want that.  Instead we want an absolute path to the input
+	 * relative path clean of unnecessary characters regardless of if it
+	 * exists and/or consists of symlinks.
+	 */
+
+	assert(path);
+	assert(wd);
+
+
+	char *buf, *nil, *buf_lim = NULL;
+	char *head, *tail = NULL;
+	size_t buf_siz = strlen(wd) + 1 + PATH_MAX;
+
+
+	if (*path == '\0') return NULL;
+
+
+	buf = calloc(buf_siz, sizeof(char));
+	if (!buf) return NULL;
+
+	strcpy(buf, wd);
+	nil = buf + buf_siz - PATH_MAX - 1;
+	buf_lim = buf + buf_siz;
+
+
+	for (tail = head = path; *head; head = tail) {
+		// skip multiple '/'
+		while (*head == '/') ++head;
+
+		// find the end of the path component
+		tail = head;
+		while (*tail && *tail != '/') ++tail;
+
+		// manage relative components
+		uintptr_t diff = tail - head;
+		if (diff == 0) break;
+		if (diff == 1 && head[0] == '.') continue;
+		if (diff == 2 && head[0] == '.' && head[1] == '.') {
+			// go up to the previous path component (ignoring root)
+			if (nil > buf + 1) {
+				while ((--nil)[-1] != '/');
+				*nil = '\0';
+			}
+			continue;
+		}
+
+		// make sure we have a trailing '/'
+		if (nil[-1] != '/') *nil++ = '/';
+
+		// resize if necessary
+		if (nil + diff >= buf_lim) {
+			uintptr_t nil_offset = nil - buf;
+			char *buf_new = NULL;
+
+			buf_siz += (diff + 1 > PATH_MAX) ? diff + 1 : PATH_MAX;
+
+			buf_new = realloc(buf, buf_siz);
+			if (!buf_new) goto error;
+
+			buf = buf_new;
+			buf_lim = buf + buf_siz;
+			nil = buf + nil_offset;
+		}
+
+		nil = mempcpy(nil, head, diff);
+		*nil = '\0';
+	}
+
+	return buf;
+
+error:
+	FREE(buf);
+	return NULL;
+}
 
 /*
  * Generate a relative path from an absolute source to an absolute destination.
