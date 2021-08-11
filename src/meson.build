@@ -17,6 +17,7 @@
 dotfile_manager_sources = files(
         'dotfile-manager.c',
         'path.c',
+        'settings.c',
 )
 
 dotfile_manager_inc = include_directories('.')
