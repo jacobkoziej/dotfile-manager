@@ -17,3 +17,12 @@
  */
 
 #include "settings.h"
+
+#include <stdbool.h>
+
+
+setting_t settings = {
+	.flag = {
+		.dry_run = false,
+	},
+};

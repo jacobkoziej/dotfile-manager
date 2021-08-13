@@ -32,4 +32,7 @@ typedef struct setting_s {
 } setting_t;
 
 
+extern setting_t settings;
+
+
 #endif /* DOTFILE_MANAGER_SETTINGS */
