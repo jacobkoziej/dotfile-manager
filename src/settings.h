@@ -20,4 +20,12 @@
 #define DOTFILE_MANAGER_SETTINGS
 
 
+#include <stdbool.h>
+
+
+typedef struct setting_flag_s {
+	bool dry_run;
+} setting_flag_t;
+
+
 #endif /* DOTFILE_MANAGER_SETTINGS */
