@@ -27,5 +27,9 @@ typedef struct setting_flag_s {
 	bool dry_run;
 } setting_flag_t;
 
+typedef struct setting_s {
+	setting_flag_t flag;
+} setting_t;
+
 
 #endif /* DOTFILE_MANAGER_SETTINGS */
