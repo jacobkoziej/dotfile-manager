@@ -18,7 +18,10 @@
 
 #include "settings.h"
 
+#include <assert.h>
+#include <getopt.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 
 setting_t settings = {
@@ -26,3 +29,47 @@ setting_t settings = {
 		.dry_run = false,
 	},
 };
+
+static setting_flag_t *flag = &settings.flag;
+
+
+/*
+ * Parse command-line options.
+ */
+int setting_getopt(int argc, char **argv)
+{
+	assert(argv);
+
+
+	static char *flags = ":n";
+	static struct option long_flags[] = {
+		{"dry-run", no_argument, NULL, 'n'},
+		{        0,           0,    0,   0},
+	};
+
+	opterr = 0;  // disable getopt() error messages
+
+
+	while (true) {
+		int opt, long_index;
+
+		opt = getopt_long(argc, argv, flags, long_flags, &long_index);
+		if (opt == -1) break;  // nothing left to parse
+
+		switch (opt) {
+			// dry-run
+			case 'n':
+				flag->dry_run = true;
+				break;
+
+			case '?':
+			case ':':
+			default:
+				// TODO: handle errors
+				return -1;
+		}
+	}
+
+
+	return optind;
+}

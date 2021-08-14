@@ -35,4 +35,7 @@ typedef struct setting_s {
 extern setting_t settings;
 
 
+int setting_getopt(int argc, char **argv);
+
+
 #endif /* DOTFILE_MANAGER_SETTINGS */
