@@ -27,8 +27,9 @@
 
 setting_t settings = {
 	.flag = {
-		.ansi_sgr = false,
-		.dry_run  = false,
+		.ansi_sgr_stdout = false,
+		.ansi_sgr_stderr = false,
+		.dry_run         = false,
 	},
 };
 
@@ -40,8 +41,8 @@ static setting_flag_t *flag = &settings.flag;
  */
 int setting_auto(void)
 {
-	if (isatty(STDOUT_FILENO) || isatty(STDERR_FILENO))
-		flag->ansi_sgr = true;
+	if (isatty(STDOUT_FILENO)) flag->ansi_sgr_stdout = true;
+	if (isatty(STDERR_FILENO)) flag->ansi_sgr_stderr = true;
 
 
 	return 0;
