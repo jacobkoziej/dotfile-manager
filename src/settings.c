@@ -26,7 +26,8 @@
 
 setting_t settings = {
 	.flag = {
-		.dry_run = false,
+		.ansi_sgr = false,
+		.dry_run  = false,
 	},
 };
 

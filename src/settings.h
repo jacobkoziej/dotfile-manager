@@ -24,6 +24,7 @@
 
 
 typedef struct setting_flag_s {
+	bool ansi_sgr;
 	bool dry_run;
 } setting_flag_t;
 
