@@ -71,6 +71,7 @@ int setting_getopt(int argc, char **argv)
 
 	while (true) {
 		int opt, long_index;
+		const char *name;
 
 		opt = getopt_long(argc, argv, flags, long_flags, &long_index);
 		if (opt == -1) break;  // nothing left to parse
@@ -81,16 +82,27 @@ int setting_getopt(int argc, char **argv)
 				flag->dry_run = true;
 				break;
 
+
+			// long options
+			case 0:
+				name = long_flags[long_index].name;
+				if (parse_long_flags(name) < 0) goto error;
+				break;
+
+
 			case '?':
 			case ':':
 			default:
 				// TODO: handle errors
-				return -1;
+				goto error;
 		}
 	}
 
 
 	return optind;
+
+error:
+	return -1;
 }
 
 
@@ -120,4 +132,19 @@ static int ansi_sgr_mode(char *mode)
 
 
 	return 0;
+}
+
+/*
+ * Parse long options.
+ */
+static int parse_long_flags(const char *name)
+{
+	if (!strcmp(name, "color"))
+		if (ansi_sgr_mode(optarg) < 0) goto error;
+
+
+	return 0;
+
+error:
+	return -1;
 }

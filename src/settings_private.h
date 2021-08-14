@@ -21,6 +21,7 @@
 
 
 static int ansi_sgr_mode(char *mode);
+static int parse_long_flags(const char *name);
 
 
 #endif /* DOTFILE_MANAGER_SETTINGS_PRIVATE */
