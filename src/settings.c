@@ -22,6 +22,7 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <unistd.h>
 
 
 setting_t settings = {
@@ -33,6 +34,18 @@ setting_t settings = {
 
 static setting_flag_t *flag = &settings.flag;
 
+
+/*
+ * Set options automatically.
+ */
+int setting_auto(void)
+{
+	if (isatty(STDOUT_FILENO) || isatty(STDERR_FILENO))
+		flag->ansi_sgr = true;
+
+
+	return 0;
+}
 
 /*
  * Parse command-line options.

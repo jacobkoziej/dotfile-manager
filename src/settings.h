@@ -36,6 +36,7 @@ typedef struct setting_s {
 extern setting_t settings;
 
 
+int setting_auto(void);
 int setting_getopt(int argc, char **argv);
 
 
