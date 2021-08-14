@@ -20,4 +20,7 @@
 #define DOTFILE_MANAGER_SETTINGS_PRIVATE
 
 
+static int ansi_sgr_mode(char *mode);
+
+
 #endif /* DOTFILE_MANAGER_SETTINGS_PRIVATE */

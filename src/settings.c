@@ -17,11 +17,13 @@
  */
 
 #include "settings.h"
+#include "settings_private.h"
 
 #include <assert.h>
 #include <getopt.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <string.h>
 #include <unistd.h>
 
 
@@ -41,11 +43,13 @@ static setting_flag_t *flag = &settings.flag;
  */
 int setting_auto(void)
 {
-	if (isatty(STDOUT_FILENO)) flag->ansi_sgr_stdout = true;
-	if (isatty(STDERR_FILENO)) flag->ansi_sgr_stderr = true;
+	if (ansi_sgr_mode(NULL) < 0) goto error;
 
 
 	return 0;
+
+error:
+	return -1;
 }
 
 /*
@@ -87,4 +91,33 @@ int setting_getopt(int argc, char **argv)
 
 
 	return optind;
+}
+
+
+/*
+ * Set the ANSI SGR mode for stdout and stderr.
+ */
+static int ansi_sgr_mode(char *mode)
+{
+	if (!mode || !strcmp(mode, "auto")) {
+		flag->ansi_sgr_stdout = isatty(STDOUT_FILENO);
+		flag->ansi_sgr_stderr = isatty(STDERR_FILENO);
+	} else if (!strcmp(mode, "full")) {
+		flag->ansi_sgr_stdout = true;
+		flag->ansi_sgr_stderr = true;
+	} else if (!strcmp(mode, "none")) {
+		flag->ansi_sgr_stdout = false;
+		flag->ansi_sgr_stderr = false;
+	} else if (!strcmp(mode, "stderr")) {
+		flag->ansi_sgr_stdout = false;
+		flag->ansi_sgr_stderr = true;
+	} else if (!strcmp(mode, "stdout")) {
+		flag->ansi_sgr_stdout = true;
+		flag->ansi_sgr_stderr = false;
+	} else {
+		return -1;
+	}
+
+
+	return 0;
 }
