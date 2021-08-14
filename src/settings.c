@@ -37,6 +37,13 @@ setting_t settings = {
 
 static setting_flag_t *flag = &settings.flag;
 
+static char *flags = ":n";
+static struct option long_flags[] = {
+	{  "color", optional_argument, NULL,   0},
+	{"dry-run",       no_argument, NULL, 'n'},
+	{        0,                 0,    0,   0},
+};
+
 
 /*
  * Set options automatically.
@@ -60,14 +67,7 @@ int setting_getopt(int argc, char **argv)
 	assert(argv);
 
 
-	static char *flags = ":n";
-	static struct option long_flags[] = {
-		{"dry-run", no_argument, NULL, 'n'},
-		{        0,           0,    0,   0},
-	};
-
 	opterr = 0;  // disable getopt() error messages
-
 
 	while (true) {
 		int opt, long_index;
