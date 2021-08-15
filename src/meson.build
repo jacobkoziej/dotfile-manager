@@ -16,6 +16,7 @@
 
 dotfile_manager_sources = files(
         'dotfile-manager.c',
+        'msg.c',
         'path.c',
         'settings.c',
 )
