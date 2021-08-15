@@ -1,5 +1,5 @@
 /*
- * dotfile-manager
+ * settings_private.h -- control runtime behavior
  * Copyright (C) 2021  Jacob Koziej <jacobkoziej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,22 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-
-#include "settings.h"
-
-
-int main(int argc, char **argv)
-{
-	static int optind = 0;
+#ifndef DOTFILE_MANAGER_SETTINGS_PRIVATE
+#define DOTFILE_MANAGER_SETTINGS_PRIVATE
 
 
-	if (setting_auto() < 0) goto error;
-	if ((optind = setting_getopt(argc, argv)) < 0) goto error;
+static int ansi_sgr_mode(char *mode);
+static int parse_long_flags(const char *name);
 
 
-	return EXIT_SUCCESS;
-
-error:
-	return EXIT_FAILURE;
-}
+#endif /* DOTFILE_MANAGER_SETTINGS_PRIVATE */

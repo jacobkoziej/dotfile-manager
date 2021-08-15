@@ -1,5 +1,5 @@
 /*
- * dotfile-manager
+ * settings.h -- control runtime behavior
  * Copyright (C) 2021  Jacob Koziej <jacobkoziej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,22 +16,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-
-#include "settings.h"
-
-
-int main(int argc, char **argv)
-{
-	static int optind = 0;
+#ifndef DOTFILE_MANAGER_SETTINGS
+#define DOTFILE_MANAGER_SETTINGS
 
 
-	if (setting_auto() < 0) goto error;
-	if ((optind = setting_getopt(argc, argv)) < 0) goto error;
+#include <stdbool.h>
 
 
-	return EXIT_SUCCESS;
+typedef struct setting_flag_s {
+	bool ansi_sgr_stdout;
+	bool ansi_sgr_stderr;
+	bool dry_run;
+} setting_flag_t;
 
-error:
-	return EXIT_FAILURE;
-}
+typedef struct setting_s {
+	setting_flag_t flag;
+} setting_t;
+
+
+extern setting_t settings;
+
+
+int setting_auto(void);
+int setting_getopt(int argc, char **argv);
+
+
+#endif /* DOTFILE_MANAGER_SETTINGS */
