@@ -18,8 +18,20 @@
 
 #include <stdlib.h>
 
+#include "settings.h"
 
-int main(void)
+
+int main(int argc, char **argv)
 {
+	static int optind = 0;
+
+
+	if (setting_auto() < 0) goto error;
+	if ((optind = setting_getopt(argc, argv)) < 0) goto error;
+
+
 	return EXIT_SUCCESS;
+
+error:
+	return EXIT_FAILURE;
 }
