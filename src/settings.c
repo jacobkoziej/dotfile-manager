@@ -139,8 +139,7 @@ static int ansi_sgr_mode(char *mode)
  */
 static int parse_long_flags(const char *name)
 {
-	if (!strcmp(name, "color"))
-		if (ansi_sgr_mode(optarg) < 0) goto error;
+	if (!strcmp(name, "color") && ansi_sgr_mode(optarg) < 0) goto error;
 
 
 	return 0;
