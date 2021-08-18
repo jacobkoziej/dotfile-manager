@@ -20,4 +20,16 @@
 #define DOTFILE_MANAGER_CORE
 
 
+#include <sys/stat.h>
+
+
+typedef struct target_s {
+	mode_t *type;
+
+	char *in_path;
+	char *abs_path;
+	char *link_path;
+} target_t;
+
+
 #endif /* DOTFILE_MANAGER_CORE */
