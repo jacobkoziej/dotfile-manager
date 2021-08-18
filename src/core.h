@@ -20,6 +20,7 @@
 #define DOTFILE_MANAGER_CORE
 
 
+#include <stddef.h>
 #include <sys/stat.h>
 
 
@@ -30,6 +31,11 @@ typedef struct target_s {
 	char *abs_path;
 	char *link_path;
 } target_t;
+
+typedef struct dots_s {
+	target_t *targets;
+	size_t    n;
+} dots_t;
 
 
 #endif /* DOTFILE_MANAGER_CORE */
