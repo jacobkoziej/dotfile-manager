@@ -17,3 +17,26 @@
  */
 
 #include "core.h"
+
+#include "macros.h"
+
+/*
+ * Free a dots_t type.
+ */
+void free_dots_t(dots_t **d)
+{
+	if (!d)  return;
+	if (!*d) return;
+
+	for (size_t i = 0; i < (*d)->n; i++) {
+		target_t *t = (*d)->targets + i;
+
+		FREE(t->type);
+		FREE(t->in_path);
+		FREE(t->abs_path);
+		FREE(t->link_path);
+	}
+
+	FREE((*d)->targets);
+	FREE(*d);
+}

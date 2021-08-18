@@ -38,4 +38,7 @@ typedef struct dots_s {
 } dots_t;
 
 
+void free_dots_t(dots_t **d);
+
+
 #endif /* DOTFILE_MANAGER_CORE */
