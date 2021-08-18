@@ -25,7 +25,7 @@
 
 
 typedef struct target_s {
-	mode_t *type;
+	mode_t type;
 
 	char *in_path;
 	char *abs_path;
