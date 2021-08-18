@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 dotfile_manager_sources = files(
+        'core.c',
         'dotfile-manager.c',
         'path.c',
         'settings.c',
