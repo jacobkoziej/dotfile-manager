@@ -20,11 +20,13 @@
 #define DOTFILE_MANAGER_CORE
 
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <sys/stat.h>
 
 
 typedef struct target_s {
+	bool err;
 	mode_t type;
 
 	char *in_path;
