@@ -32,16 +32,18 @@ setting_t settings = {
 		.ansi_sgr_stdout = false,
 		.ansi_sgr_stderr = false,
 		.dry_run         = false,
+		.keep_going      = false,
 	},
 };
 
 static setting_flag_t *flag = &settings.flag;
 
-static char *flags = ":n";
+static char *flags = ":kn";
 static struct option long_flags[] = {
-	{  "color", optional_argument, NULL,   0},
-	{"dry-run",       no_argument, NULL, 'n'},
-	{        0,                 0,    0,   0},
+	{     "color", optional_argument, NULL,   0},
+	{   "dry-run",       no_argument, NULL, 'n'},
+	{"keep-going",       no_argument, NULL, 'k'},
+	{           0,                 0,    0,   0},
 };
 
 
@@ -77,6 +79,11 @@ int setting_getopt(int argc, char **argv)
 		if (opt == -1) break;  // nothing left to parse
 
 		switch (opt) {
+			// keep-going
+			case 'k':
+				flag->keep_going = true;
+				break;
+
 			// dry-run
 			case 'n':
 				flag->dry_run = true;

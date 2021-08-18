@@ -27,6 +27,7 @@ typedef struct setting_flag_s {
 	bool ansi_sgr_stdout;
 	bool ansi_sgr_stderr;
 	bool dry_run;
+	bool keep_going;
 } setting_flag_t;
 
 typedef struct setting_s {
