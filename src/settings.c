@@ -34,15 +34,17 @@ setting_t settings = {
 		.dry_run         = false,
 		.keep_going      = false,
 	},
+	.work_dir = NULL,
 };
 
 static setting_flag_t *flag = &settings.flag;
 
-static char *flags = ":kn";
+static char *flags = ":knw:";
 static struct option long_flags[] = {
 	{     "color", optional_argument, NULL,   0},
 	{   "dry-run",       no_argument, NULL, 'n'},
 	{"keep-going",       no_argument, NULL, 'k'},
+	{  "work-dir", required_argument, NULL, 'w'},
 	{           0,                 0,    0,   0},
 };
 
@@ -87,6 +89,11 @@ int setting_getopt(int argc, char **argv)
 			// dry-run
 			case 'n':
 				flag->dry_run = true;
+				break;
+
+			// work-dir
+			case 'w':
+				settings.work_dir = optarg;
 				break;
 
 
