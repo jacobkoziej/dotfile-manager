@@ -72,18 +72,17 @@ error:
  */
 char *path_cat(char *org, char *add)
 {
+	assert(org);
+	assert(add);
+
+
 	char   *buf;
-	size_t  buf_siz = strlen(add) + 1;
+	size_t  buf_siz = strlen(org) + strlen(add) + 1;
 
-
-	if (org) {
-		buf_siz += strlen(org);
-		buf = realloc(org, buf_siz);
-	} else {
-		buf = calloc(buf_siz, sizeof(char));
-	}
-
+	buf = calloc(buf_siz, sizeof(char));
 	if (!buf) return NULL;
+
+	strcat(buf, org);
 	strcat(buf, add);
 
 
