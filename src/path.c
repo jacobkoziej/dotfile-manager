@@ -66,6 +66,30 @@ error:
 	return -1;
 }
 
+
+/*
+ * Concatenate existing paths.
+ */
+char *path_cat(char *org, char *add)
+{
+	char   *buf;
+	size_t  buf_siz = strlen(add) + 1;
+
+
+	if (org) {
+		buf_siz += strlen(org);
+		buf = realloc(org, buf_siz);
+	} else {
+		buf = calloc(buf_siz, sizeof(char));
+	}
+
+	if (!buf) return NULL;
+	strcat(buf, add);
+
+
+	return buf;
+}
+
 /*
  * Return the full file path.
  */
