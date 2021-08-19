@@ -32,6 +32,7 @@ typedef struct setting_flag_s {
 
 typedef struct setting_s {
 	setting_flag_t flag;
+	char *store_dir;
 	char *work_dir;
 } setting_t;
 
