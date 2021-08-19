@@ -77,12 +77,18 @@ char *path_cat(char *org, char *add)
 
 
 	char   *buf;
-	size_t  buf_siz = strlen(org) + strlen(add) + 1;
+	size_t  buf_siz = 0;
+	size_t  org_len = strlen(org);
+
+
+	if (org[org_len - 1] != '/') ++buf_siz;  // ensue trailing '/'
+	buf_siz += org_len + strlen(add) + 1;
 
 	buf = calloc(buf_siz, sizeof(char));
 	if (!buf) return NULL;
 
 	strcat(buf, org);
+	if (org[org_len - 1] != '/') strcat(buf, "/");
 	strcat(buf, add);
 
 
