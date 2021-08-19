@@ -20,8 +20,9 @@
 #define DOTFILE_MANAGER_CONFIG
 
 
-#define PROGRAM_NAME    "@program-name@"
-#define PROGRAM_VERSION "@program-version@"
+#define PROGRAM_NAME      "@program-name@"
+#define PROGRAM_VERSION   "@program-version@"
+#define DEFAULT_STORE_DIR "@store-dir@"
 
 
 #endif /* DOTFILE_MANAGER_CONFIG */

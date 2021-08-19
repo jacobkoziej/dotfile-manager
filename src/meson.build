@@ -36,6 +36,11 @@ dotfile_manager_conf_data.set(
         meson.project_version(),
 )
 
+dotfile_manager_conf_data.set(
+        'store-dir',
+        get_option('store-dir'),
+)
+
 
 configure_file(
         input         : 'config.h.in',
