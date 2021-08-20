@@ -73,6 +73,14 @@ error:
 }
 
 /*
+ * Free dynamic members of the global settings structure.
+ */
+void setting_free(void)
+{
+	FREE(settings.store_dir);
+}
+
+/*
  * Parse command-line options.
  */
 int setting_getopt(int argc, char **argv)

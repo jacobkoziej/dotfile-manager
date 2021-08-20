@@ -30,8 +30,12 @@ int main(int argc, char **argv)
 	if ((optind = setting_getopt(argc, argv)) < 0) goto error;
 
 
+	setting_free();
+
 	return EXIT_SUCCESS;
 
 error:
+	setting_free();
+
 	return EXIT_FAILURE;
 }
