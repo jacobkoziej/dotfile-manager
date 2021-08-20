@@ -23,8 +23,13 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#include "config.h"
+#include "macros.h"
+#include "path.h"
 
 
 setting_t settings = {
@@ -57,6 +62,8 @@ static struct option long_flags[] = {
 int setting_auto(void)
 {
 	if (ansi_sgr_mode(NULL) < 0) goto error;
+
+	if (set_store_dir(NULL, NULL) < 0) goto error;
 
 
 	return 0;
@@ -95,7 +102,8 @@ int setting_getopt(int argc, char **argv)
 
 			// store-dir
 			case 's':
-				settings.store_dir = optarg;
+				FREE(settings.store_dir);
+				if (set_store_dir(settings.work_dir, optarg) < 0) goto error;
 				break;
 
 			// work-dir
@@ -167,4 +175,25 @@ static int parse_long_flags(const char *name)
 
 error:
 	return -1;
+}
+
+/*
+ * Set the store directory.
+ */
+static int set_store_dir(char *wd, char *dir)
+{
+	char *buf, *tmp;
+
+
+	tmp = (wd) ? wd : getenv("HOME");
+	if (!tmp) return -1;
+
+	buf = path_cat(tmp, (dir) ? dir : DEFAULT_STORE_DIR);
+	if (!buf) return -1;
+
+	settings.store_dir = buf;
+
+
+	return 0;
+
 }
