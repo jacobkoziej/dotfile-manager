@@ -40,7 +40,7 @@ setting_t settings = {
 
 static setting_flag_t *flag = &settings.flag;
 
-static char *flags = ":knw:";
+static char *flags = ":kns:w:";
 static struct option long_flags[] = {
 	{     "color", optional_argument, NULL,   0},
 	{   "dry-run",       no_argument, NULL, 'n'},
