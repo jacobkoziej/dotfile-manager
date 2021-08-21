@@ -63,6 +63,7 @@ int setting_auto(void)
 {
 	if (ansi_sgr_mode(NULL) < 0) goto error;
 
+	if (set_work_dir(NULL) < 0) goto error;
 	if (set_store_dir(NULL, NULL) < 0) goto error;
 
 
@@ -78,6 +79,7 @@ error:
 void setting_free(void)
 {
 	FREE(settings.store_dir);
+	FREE(settings.work_dir);
 }
 
 /*
@@ -115,7 +117,7 @@ int setting_getopt(int argc, char **argv)
 
 			// work-dir
 			case 'w':
-				settings.work_dir = optarg;
+				if (set_work_dir(optarg) < 0) goto error;
 				break;
 
 
@@ -210,5 +212,44 @@ static int set_store_dir(char *wd, char *dir)
 
 error:
 	FREE(buf);
+	return -1;
+}
+
+/*
+ * Set the work directory.
+ */
+static int set_work_dir(char *dir)
+{
+	char *buf, *wd = NULL;
+
+	// default to cwd
+	if (!dir) {
+		buf = get_current_dir_name();
+		if (!buf) return -1;
+
+		FREE(settings.work_dir);
+		settings.work_dir = buf;
+
+		return 0;
+	}
+
+	// we still need cwd for relative paths
+	if (*dir != '/') {
+		wd = get_current_dir_name();
+		if (!wd) return -1;
+	}
+
+	// generate the absolute path regardless
+	buf = path_abs(wd, dir);
+	if (!buf) goto error;
+
+	FREE(settings.work_dir);
+	settings.work_dir = buf;
+
+
+	return 0;
+
+error:
+	FREE(wd);
 	return -1;
 }
