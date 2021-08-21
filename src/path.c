@@ -94,6 +94,11 @@ char *path_abs(char *wd, char *path)
 		return NULL;
 	}
 
+	if (wd && *wd != '/') {
+		errno = EINVAL;
+		return NULL;
+	}
+
 
 	char *buf, *cwd = NULL;
 	char *buf_lim, *nul, *head, *tail;
