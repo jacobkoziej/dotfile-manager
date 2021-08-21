@@ -167,7 +167,8 @@ char *path_full(char *wd, char *path)
 		}
 
 		// make sure we have a trailing '/'
-		if (nul[-1] != '/') *nul++ = '/';
+		// and prevent an invalid read of size 1
+		if ((nul - 1 <= buf) || nul[-1] != '/') *nul++ = '/';
 
 		// resize if necessary
 		if (nul + diff >= buf_lim) {
