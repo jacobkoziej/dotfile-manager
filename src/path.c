@@ -21,11 +21,13 @@
 #include <assert.h>
 #include <errno.h>
 #include <limits.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include "macros.h"
 
@@ -109,22 +111,36 @@ char *path_full(char *wd, char *path)
 	 * exists and/or consists of symlinks.
 	 */
 
-	assert(wd);
 	assert(path);
 
+	if (!path) {
+		errno = EINVAL;
+		return NULL;
+	}
 
-	char *buf, *nul, *buf_lim = NULL;
-	char *head, *tail = NULL;
-	size_t buf_siz = strlen(wd) + 1 + PATH_MAX;
+	if (*path == '\0') {
+		errno = ENOENT;
+		return NULL;
+	}
 
 
-	if (*path == '\0') return NULL;
+	char *buf, *cwd = NULL;
+	char *buf_lim, *nul, *head, *tail;
+	size_t buf_siz = PATH_MAX + 1;
+	bool rel_path = *path != '/';
 
+
+	if (rel_path && !wd) {
+		cwd = get_current_dir_name();
+		if (!cwd) return NULL;
+		buf_siz += strlen(cwd);
+	}
+	if (rel_path) buf_siz += strlen((wd) ? wd : cwd);
 
 	buf = calloc(buf_siz, sizeof(char));
-	if (!buf) return NULL;
+	if (!buf) goto error;
 
-	strcpy(buf, wd);
+	if (rel_path) strcpy(buf, (wd) ? wd : cwd);
 	nul = buf + buf_siz - PATH_MAX - 1;
 	buf_lim = buf + buf_siz;
 
@@ -172,10 +188,12 @@ char *path_full(char *wd, char *path)
 		*nul = '\0';
 	}
 
+	FREE(cwd);
 	return buf;
 
 error:
 	FREE(buf);
+	FREE(cwd);
 	return NULL;
 }
 
