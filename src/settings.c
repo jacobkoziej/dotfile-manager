@@ -110,7 +110,6 @@ int setting_getopt(int argc, char **argv)
 
 			// store-dir
 			case 's':
-				FREE(settings.store_dir);
 				if (set_store_dir(settings.work_dir, optarg) < 0) goto error;
 				break;
 
@@ -203,6 +202,7 @@ static int set_store_dir(char *wd, char *dir)
 	if (!tmp) goto error;
 
 	FREE(buf);
+	FREE(settings.store_dir);
 	settings.store_dir = tmp;
 
 
