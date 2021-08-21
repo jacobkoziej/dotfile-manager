@@ -189,7 +189,7 @@ error:
  */
 static int set_store_dir(char *wd, char *dir)
 {
-	char *buf, *tmp;
+	char *buf, *tmp = NULL;
 
 
 	tmp = (wd) ? wd : getenv("HOME");
