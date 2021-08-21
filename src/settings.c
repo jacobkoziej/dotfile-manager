@@ -64,7 +64,7 @@ int setting_auto(void)
 	if (ansi_sgr_mode(NULL) < 0) goto error;
 
 	if (set_work_dir(NULL) < 0) goto error;
-	if (set_store_dir(NULL, NULL) < 0) goto error;
+	if (set_store_dir(NULL) < 0) goto error;
 
 
 	return 0;
@@ -112,7 +112,7 @@ int setting_getopt(int argc, char **argv)
 
 			// store-dir
 			case 's':
-				if (set_store_dir(settings.work_dir, optarg) < 0) goto error;
+				if (set_store_dir(optarg) < 0) goto error;
 				break;
 
 			// work-dir
@@ -189,29 +189,40 @@ error:
 /*
  * Set the store directory.
  */
-static int set_store_dir(char *wd, char *dir)
+static int set_store_dir(char *dir)
 {
+	// you can remove *wd
+	// basically if dir isn't set we set it to $HOME/.dotfiles
 	char *buf, *tmp = NULL;
 
 
-	tmp = (wd) ? wd : getenv("HOME");
+	// ensure we have our wd set
+	if (!settings.work_dir && set_work_dir(NULL) < 0) goto error;
+
+	// default to $HOME/DEFAULT_STORE_DIR
+	if (!dir) {
+		char *home = getenv("HOME");
+		if (!home) return -1;
+
+		tmp = path_cat(home, DEFAULT_STORE_DIR);
+	} else {
+		tmp = path_cat(settings.work_dir, dir);
+	}
 	if (!tmp) return -1;
 
-	buf = path_cat(tmp, (dir) ? dir : DEFAULT_STORE_DIR);
-	if (!buf) return -1;
+	// generate the absolute path regardless
+	buf = path_abs(settings.work_dir, tmp);
+	if (!buf) goto error;
 
-	tmp = path_abs(settings.work_dir, buf);
-	if (!tmp) goto error;
 
-	FREE(buf);
+	FREE(tmp);
 	FREE(settings.store_dir);
-	settings.store_dir = tmp;
-
+	settings.store_dir = buf;
 
 	return 0;
 
 error:
-	FREE(buf);
+	FREE(tmp);
 	return -1;
 }
 

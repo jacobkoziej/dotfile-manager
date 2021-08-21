@@ -22,7 +22,7 @@
 
 static int ansi_sgr_mode(char *mode);
 static int parse_long_flags(const char *name);
-static int set_store_dir(char *wd, char *dir);
+static int set_store_dir(char *dir);
 static int set_work_dir(char *dir);
 
 
