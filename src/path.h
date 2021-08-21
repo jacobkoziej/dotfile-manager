@@ -24,8 +24,8 @@
 
 
 int   mkdirp(const char *path, mode_t mode);
+char *path_abs(char *wd, char *path);
 char *path_cat(char *org, char *add);
-char *path_full(char *wd, char *path);
 char *path_rel(char *src, char *dst);
 char *path_sub(char *path, char *pat, char *sub);
 

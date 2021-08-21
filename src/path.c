@@ -68,39 +68,10 @@ error:
 	return -1;
 }
 
-
 /*
- * Concatenate existing paths.
+ * Return the absolute file path.
  */
-char *path_cat(char *org, char *add)
-{
-	assert(org);
-	assert(add);
-
-
-	char   *buf;
-	size_t  buf_siz = 0;
-	size_t  org_len = strlen(org);
-
-
-	if (org[org_len - 1] != '/') ++buf_siz;  // ensue trailing '/'
-	buf_siz += org_len + strlen(add) + 1;
-
-	buf = calloc(buf_siz, sizeof(char));
-	if (!buf) return NULL;
-
-	strcat(buf, org);
-	if (org[org_len - 1] != '/') strcat(buf, "/");
-	strcat(buf, add);
-
-
-	return buf;
-}
-
-/*
- * Return the full file path.
- */
-char *path_full(char *wd, char *path)
+char *path_abs(char *wd, char *path)
 {
 	/*
 	 * The existing implementation of realpath() in glibc dereferences
@@ -196,6 +167,34 @@ error:
 	FREE(buf);
 	FREE(cwd);
 	return NULL;
+}
+
+/*
+ * Concatenate existing paths.
+ */
+char *path_cat(char *org, char *add)
+{
+	assert(org);
+	assert(add);
+
+
+	char   *buf;
+	size_t  buf_siz = 0;
+	size_t  org_len = strlen(org);
+
+
+	if (org[org_len - 1] != '/') ++buf_siz;  // ensue trailing '/'
+	buf_siz += org_len + strlen(add) + 1;
+
+	buf = calloc(buf_siz, sizeof(char));
+	if (!buf) return NULL;
+
+	strcat(buf, org);
+	if (org[org_len - 1] != '/') strcat(buf, "/");
+	strcat(buf, add);
+
+
+	return buf;
 }
 
 /*
