@@ -47,7 +47,7 @@ int mkdirp(const char *path, mode_t mode)
 
 
 	// generate all parents as necessary
-	for ( char *d = strchr(path_dup + 1, '/'); d; d = strchr(d + 1, '/')) {
+	for (char *d = strchr(path_dup + 1, '/'); d; d = strchr(d + 1, '/')) {
 		*d = '\0';
 		if (mkdir(path_dup, mode) < 0 && errno != EEXIST) goto error;
 		*d = '/';
