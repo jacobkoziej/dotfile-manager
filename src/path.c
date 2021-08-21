@@ -164,8 +164,16 @@ char *path_abs(char *wd, char *path)
 		*nul = '\0';
 	}
 
+	// (if it exists) remove the trailing '/'
+	if (nul - 1 > buf && nul[-1] == '/') *--nul = '\0';
+
+	// shrink the buffer to fit the generated path
+	char *out = realloc(buf, sizeof(char) * (strlen(buf) + 1));
+	if (!out) goto error;
+
+
 	FREE(cwd);
-	return buf;
+	return out;
 
 error:
 	FREE(buf);
