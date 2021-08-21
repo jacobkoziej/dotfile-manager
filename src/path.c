@@ -116,7 +116,8 @@ char *path_abs(char *wd, char *path)
 	if (!buf) goto error;
 
 	if (rel_path) strcpy(buf, (wd) ? wd : cwd);
-	nul = buf + buf_siz - PATH_MAX - 1;
+	else *buf = '/';  // we need root!
+	nul = buf + buf_siz - PATH_MAX - rel_path;
 	buf_lim = buf + buf_siz;
 
 
@@ -143,7 +144,7 @@ char *path_abs(char *wd, char *path)
 
 		// make sure we have a trailing '/'
 		// and prevent an invalid read of size 1
-		if ((nul - 1 <= buf) || nul[-1] != '/') *nul++ = '/';
+		if (nul - 1 < buf || nul[-1] != '/') *nul++ = '/';
 
 		// resize if necessary
 		if (nul + diff >= buf_lim) {
