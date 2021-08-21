@@ -199,9 +199,16 @@ static int set_store_dir(char *wd, char *dir)
 	buf = path_cat(tmp, (dir) ? dir : DEFAULT_STORE_DIR);
 	if (!buf) return -1;
 
-	settings.store_dir = buf;
+	tmp = path_abs(settings.work_dir, buf);
+	if (!tmp) goto error;
+
+	FREE(buf);
+	settings.store_dir = tmp;
 
 
 	return 0;
 
+error:
+	FREE(buf);
+	return -1;
 }
