@@ -109,7 +109,6 @@ char *path_abs(char *wd, char *path)
 	if (rel_path && !wd) {
 		cwd = get_current_dir_name();
 		if (!cwd) return NULL;
-		buf_siz += strlen(cwd);
 	}
 	if (rel_path) buf_siz += strlen((wd) ? wd : cwd);
 
