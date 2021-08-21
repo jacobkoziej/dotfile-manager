@@ -187,8 +187,15 @@ error:
  */
 char *path_cat(char *org, char *add)
 {
-	assert(org);
-	assert(add);
+	if (!add) {
+		errno = EINVAL;
+		return NULL;
+	}
+
+	// if we have no original string,
+	// or if we get an absolute path,
+	// we need to guarantee a string on the heap
+	if (!org || *add == '/') return strdup(add);
 
 
 	char   *buf;
