@@ -99,40 +99,11 @@ int setting_getopt(int argc, char **argv)
 		opt = getopt_long(argc, argv, flags, long_flags, &long_index);
 		if (opt == -1) break;  // nothing left to parse
 
-		switch (opt) {
-			// keep-going
-			case 'k':
-				flag->keep_going = true;
-				break;
-
-			// dry-run
-			case 'n':
-				flag->dry_run = true;
-				break;
-
-			// store-dir
-			case 's':
-				if (set_store_dir(optarg) < 0) goto error;
-				break;
-
-			// work-dir
-			case 'w':
-				if (set_work_dir(optarg) < 0) goto error;
-				break;
-
-
-			// long options
-			case 0:
-				name = long_flags[long_index].name;
-				if (parse_long_flags(name) < 0) goto error;
-				break;
-
-
-			case '?':
-			case ':':
-			default:
-				// TODO: handle errors
-				goto error;
+		if (!opt) {
+			name = long_flags[long_index].name;
+			if (parse_long_flags(name) < 0) goto error;
+		} else {
+			if (parse_short_flags(opt) < 0) goto error;
 		}
 	}
 
@@ -179,6 +150,45 @@ static int parse_long_flags(const char *name)
 {
 	if (!strcmp(name, "color") && ansi_sgr_mode(optarg) < 0) goto error;
 
+
+	return 0;
+
+error:
+	return -1;
+}
+
+/*
+ * Parse short options.
+ */
+static int parse_short_flags(int val)
+{
+	switch (val) {
+		// keep-going
+		case 'k':
+			flag->keep_going = true;
+			break;
+
+			// dry-run
+		case 'n':
+			flag->dry_run = true;
+			break;
+
+			// store-dir
+		case 's':
+			if (set_store_dir(optarg) < 0) goto error;
+			break;
+
+			// work-dir
+		case 'w':
+			if (set_work_dir(optarg) < 0) goto error;
+			break;
+
+		case '?':
+		case ':':
+		default:
+			// TODO: handle errors
+			goto error;
+	}
 
 	return 0;
 
