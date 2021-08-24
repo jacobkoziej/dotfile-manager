@@ -61,7 +61,7 @@ static struct option long_flags[] = {
  */
 int setting_auto(void)
 {
-	if (ansi_sgr_mode(NULL) < 0) goto error;
+	if (ansi_sgr_mode("auto") < 0) goto error;
 
 	if (set_work_dir(NULL) < 0) goto error;
 	if (set_store_dir(NULL) < 0) goto error;
@@ -120,12 +120,12 @@ error:
  */
 static int ansi_sgr_mode(char *mode)
 {
-	if (!mode || !strcmp(mode, "auto")) {
-		flag->ansi_sgr_stdout = isatty(STDOUT_FILENO);
-		flag->ansi_sgr_stderr = isatty(STDERR_FILENO);
-	} else if (!strcmp(mode, "full")) {
+	if (!mode || !strcmp(mode, "full")) {
 		flag->ansi_sgr_stdout = true;
 		flag->ansi_sgr_stderr = true;
+	} else if (!strcmp(mode, "auto")) {
+		flag->ansi_sgr_stdout = isatty(STDOUT_FILENO);
+		flag->ansi_sgr_stderr = isatty(STDERR_FILENO);
 	} else if (!strcmp(mode, "none")) {
 		flag->ansi_sgr_stdout = false;
 		flag->ansi_sgr_stderr = false;
