@@ -264,6 +264,7 @@ static int set_work_dir(char *dir)
 	buf = path_abs(wd, dir);
 	if (!buf) goto error;
 
+	FREE(wd);
 	FREE(settings.work_dir);
 	settings.work_dir = buf;
 
