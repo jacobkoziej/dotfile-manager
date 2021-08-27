@@ -30,7 +30,8 @@ typedef struct target_s {
 	mode_t type;
 
 	char *in_path;
-	char *abs_path;
+	char *src_path;
+	char *dst_path;
 	char *link_path;
 } target_t;
 

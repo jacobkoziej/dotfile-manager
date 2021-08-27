@@ -30,7 +30,8 @@ void free_dots_t(dots_t **d)
 
 	for (size_t i = 0; i < (*d)->n; i++) {
 		target_t *t = (*d)->targets + i;
-		FREE(t->abs_path);
+		FREE(t->src_path);
+		FREE(t->dst_path);
 		FREE(t->link_path);
 	}
 
