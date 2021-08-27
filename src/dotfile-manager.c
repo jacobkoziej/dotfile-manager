@@ -21,21 +21,22 @@
 #include "settings.h"
 
 
+void cleanup(void)
+{
+	setting_free();
+}
+
 int main(int argc, char **argv)
 {
 	static int optind = 0;
 
 
-	if (setting_auto() < 0) goto error;
-	if ((optind = setting_getopt(argc, argv)) < 0) goto error;
+	atexit(cleanup);
 
 
-	setting_free();
+	if (setting_auto() < 0) return EXIT_FAILURE;
+	if ((optind = setting_getopt(argc, argv)) < 0) return EXIT_FAILURE;
+
 
 	return EXIT_SUCCESS;
-
-error:
-	setting_free();
-
-	return EXIT_FAILURE;
 }
