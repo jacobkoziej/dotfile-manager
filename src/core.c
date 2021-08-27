@@ -18,7 +18,20 @@
 
 #include "core.h"
 
+#include <assert.h>
+#include <errno.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+
 #include "macros.h"
+#include "path.h"
+#include "settings.h"
+
+
+static bool *keep_going = &settings.flag.keep_going;
+
 
 /*
  * Free a dots_t type.
@@ -37,4 +50,95 @@ void free_dots_t(dots_t **d)
 
 	FREE((*d)->targets);
 	FREE(*d);
+}
+
+/*
+ * Initialize a dots_t type.
+ */
+dots_t *load_targets(int argc, char **argv)
+{
+	assert(argc > 0);
+	assert(argv);
+
+
+	if (argc <= 0 || !argv) {
+		errno = EINVAL;
+		return NULL;
+	}
+
+	for (int i = 0; i < argc; i++) {
+		if (!argv[i]) {
+			errno = EINVAL;
+			return NULL;
+		}
+
+		if (*argv[i] == '\0') {
+			errno = ENOENT;
+			return NULL;
+		}
+	}
+
+
+	dots_t   *d;
+	target_t *t;
+	struct stat st;
+
+	char *wd = settings.work_dir;
+	char *sd = settings.store_dir;
+
+
+	d = calloc(1, sizeof(dots_t));
+	if (!d) return NULL;
+
+	d->n = argc;
+	d->targets = calloc(d->n, sizeof(target_t));
+	if (!d->targets) goto error;
+
+
+	for (size_t i = 0; i < d->n; i++) {
+		t = d->targets + i;
+
+		// since we're dealing with static memory there's no need to
+		// allocate the input string onto the heap
+		t->in_path = argv[i];
+
+		// get absolute path
+		t->src_path = path_abs(wd, t->in_path);
+		if (!t->src_path) {
+			if (!*keep_going) goto error;
+			t->err = true;
+			continue;
+		}
+
+		// get file type
+		if (lstat(t->src_path, &st) < 0) {
+			if (!*keep_going) goto error;
+			t->err = true;
+			continue;
+		}
+		t->type = st.st_mode;
+
+		// get link path
+		t->dst_path = path_sub(t->src_path, wd, sd);
+		if (!t->dst_path) {
+			if (!*keep_going) goto error;
+			t->err = true;
+			continue;
+		}
+
+		// get relative path for link
+		t->link_path = path_rel(t->src_path, t->dst_path);
+		if (!t->link_path) {
+			if (!*keep_going) goto error;
+			t->err = true;
+			continue;
+		}
+	}
+
+
+	return d;
+
+error:
+	free_dots_t(&d);
+	return NULL;
 }
