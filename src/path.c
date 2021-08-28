@@ -169,7 +169,7 @@ char *path_abs(char *wd, char *path)
 	if (nul - 1 > buf && nul[-1] == '/') *--nul = '\0';
 
 	// shrink the buffer to fit the generated path
-	char *out = realloc(buf, sizeof(char) * (strlen(buf) + 1));
+	char *out = realloc(buf, sizeof(char) * (nul - buf + 1));
 	if (!out) goto error;
 
 
