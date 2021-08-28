@@ -168,17 +168,17 @@ static int parse_short_flags(int val)
 			flag->keep_going = true;
 			break;
 
-			// dry-run
+		// dry-run
 		case 'n':
 			flag->dry_run = true;
 			break;
 
-			// store-dir
+		// store-dir
 		case 's':
 			if (set_store_dir(optarg) < 0) goto error;
 			break;
 
-			// work-dir
+		// work-dir
 		case 'w':
 			if (set_work_dir(optarg) < 0) goto error;
 			break;
@@ -189,6 +189,7 @@ static int parse_short_flags(int val)
 			// TODO: handle errors
 			goto error;
 	}
+
 
 	return 0;
 
@@ -201,8 +202,6 @@ error:
  */
 static int set_store_dir(char *dir)
 {
-	// you can remove *wd
-	// basically if dir isn't set we set it to $HOME/.dotfiles
 	char *buf, *tmp = NULL;
 
 
@@ -228,6 +227,7 @@ static int set_store_dir(char *dir)
 	FREE(tmp);
 	FREE(settings.store_dir);
 	settings.store_dir = buf;
+
 
 	return 0;
 
