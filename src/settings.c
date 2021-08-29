@@ -33,6 +33,7 @@
 
 
 setting_t settings = {
+	.targets = 0,
 	.flag = {
 		.ansi_sgr_stdout = false,
 		.ansi_sgr_stderr = false,
@@ -106,6 +107,9 @@ int setting_getopt(int argc, char **argv)
 			if (parse_short_flags(opt) < 0) goto error;
 		}
 	}
+
+	// we need to have at least one target
+	if ((settings.targets = argc - optind) <= 0) goto error;
 
 
 	return optind;

@@ -33,7 +33,7 @@ void cleanup(void)
 
 int main(int argc, char **argv)
 {
-	static int optind, targets;
+	static int optind;
 
 
 	atexit(cleanup);
@@ -43,9 +43,7 @@ int main(int argc, char **argv)
 	if ((optind = setting_getopt(argc, argv)) < 0) return EXIT_FAILURE;
 
 
-	if ((targets = argc - optind) <= 0) return EXIT_FAILURE;
-
-	dots = load_targets(targets, argv + optind);
+	dots = load_targets(settings.targets, argv + optind);
 	if (!dots) return EXIT_FAILURE;
 
 
