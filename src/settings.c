@@ -33,6 +33,7 @@
 
 
 setting_t settings = {
+	.mode    = '\0',
 	.targets = 0,
 	.flag = {
 		.ansi_sgr_stdout = false,
