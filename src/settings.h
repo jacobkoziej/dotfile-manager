@@ -27,18 +27,23 @@ typedef struct setting_flag_s {
 	bool ansi_sgr_stdout;
 	bool ansi_sgr_stderr;
 	bool dry_run;
+	bool keep_going;
 } setting_flag_t;
 
 typedef struct setting_s {
+	int targets;
 	setting_flag_t flag;
+	char *store_dir;
+	char *work_dir;
 } setting_t;
 
 
 extern setting_t settings;
 
 
-int setting_auto(void);
-int setting_getopt(int argc, char **argv);
+int  setting_auto(void);
+void setting_free(void);
+int  setting_getopt(int argc, char **argv);
 
 
 #endif /* DOTFILE_MANAGER_SETTINGS */

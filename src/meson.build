@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 dotfile_manager_sources = files(
+        'core.c',
         'dotfile-manager.c',
         'path.c',
         'settings.c',
@@ -33,6 +34,11 @@ dotfile_manager_conf_data.set(
 dotfile_manager_conf_data.set(
         'program-version',
         meson.project_version(),
+)
+
+dotfile_manager_conf_data.set(
+        'store-dir',
+        get_option('store-dir'),
 )
 
 

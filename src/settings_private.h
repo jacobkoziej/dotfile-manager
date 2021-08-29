@@ -22,6 +22,9 @@
 
 static int ansi_sgr_mode(char *mode);
 static int parse_long_flags(const char *name);
+static int parse_short_flags(int val);
+static int set_store_dir(char *dir);
+static int set_work_dir(char *dir);
 
 
 #endif /* DOTFILE_MANAGER_SETTINGS_PRIVATE */

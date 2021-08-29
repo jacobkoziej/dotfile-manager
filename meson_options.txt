@@ -20,3 +20,10 @@ option(
         value : 'dots',
         description : 'executable filename',
 )
+
+option(
+        'store-dir',
+        type : 'string',
+        value : '.dotfiles',
+        description : 'dotfile store directory (relative to home)'
+)

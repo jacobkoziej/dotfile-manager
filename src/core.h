@@ -1,5 +1,5 @@
 /*
- * config.h -- program configuration
+ * core.h -- core functionality
  * Copyright (C) 2021  Jacob Koziej <jacobkoziej@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,13 +16,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef DOTFILE_MANAGER_CONFIG
-#define DOTFILE_MANAGER_CONFIG
+#ifndef DOTFILE_MANAGER_CORE
+#define DOTFILE_MANAGER_CORE
 
 
-#define PROGRAM_NAME      "@program-name@"
-#define PROGRAM_VERSION   "@program-version@"
-#define DEFAULT_STORE_DIR "@store-dir@"
+#include <stdbool.h>
+#include <stddef.h>
+#include <sys/stat.h>
 
 
-#endif /* DOTFILE_MANAGER_CONFIG */
+typedef struct target_s {
+	bool err;
+	mode_t type;
+
+	char *in_path;
+	char *src_path;
+	char *dst_path;
+	char *link_path;
+} target_t;
+
+typedef struct dots_s {
+	target_t *targets;
+	size_t    n;
+} dots_t;
+
+
+void    free_dots_t(dots_t **d);
+dots_t *load_targets(int argc, char **argv);
+
+
+#endif /* DOTFILE_MANAGER_CORE */

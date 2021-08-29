@@ -21,11 +21,13 @@
 #include <assert.h>
 #include <errno.h>
 #include <limits.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include "macros.h"
 
@@ -47,7 +49,7 @@ int mkdirp(const char *path, mode_t mode)
 
 
 	// generate all parents as necessary
-	for ( char *d = strchr(path_dup + 1, '/'); d; d = strchr(d + 1, '/')) {
+	for (char *d = strchr(path_dup + 1, '/'); d; d = strchr(d + 1, '/')) {
 		*d = '\0';
 		if (mkdir(path_dup, mode) < 0 && errno != EEXIST) goto error;
 		*d = '/';
@@ -67,9 +69,9 @@ error:
 }
 
 /*
- * Return the full file path.
+ * Return the absolute file path.
  */
-char *path_full(char *wd, char *path)
+char *path_abs(char *wd, char *path)
 {
 	/*
 	 * The existing implementation of realpath() in glibc dereferences
@@ -80,23 +82,42 @@ char *path_full(char *wd, char *path)
 	 * exists and/or consists of symlinks.
 	 */
 
-	assert(wd);
 	assert(path);
 
+	if (!path) {
+		errno = EINVAL;
+		return NULL;
+	}
 
-	char *buf, *nul, *buf_lim = NULL;
-	char *head, *tail = NULL;
-	size_t buf_siz = strlen(wd) + 1 + PATH_MAX;
+	if (*path == '\0') {
+		errno = ENOENT;
+		return NULL;
+	}
+
+	if (wd && *wd != '/') {
+		errno = EINVAL;
+		return NULL;
+	}
 
 
-	if (*path == '\0') return NULL;
+	char *buf, *cwd = NULL;
+	char *buf_lim, *nul, *head, *tail;
+	size_t buf_siz = PATH_MAX + 1;
+	bool rel_path = *path != '/';
 
+
+	if (rel_path && !wd) {
+		cwd = get_current_dir_name();
+		if (!cwd) return NULL;
+	}
+	if (rel_path) buf_siz += strlen((wd) ? wd : cwd);
 
 	buf = calloc(buf_siz, sizeof(char));
-	if (!buf) return NULL;
+	if (!buf) goto error;
 
-	strcpy(buf, wd);
-	nul = buf + buf_siz - PATH_MAX - 1;
+	if (rel_path) strcpy(buf, (wd) ? wd : cwd);
+	else *buf = '/';  // we need root!
+	nul = buf + buf_siz - PATH_MAX - rel_path;
 	buf_lim = buf + buf_siz;
 
 
@@ -122,7 +143,8 @@ char *path_full(char *wd, char *path)
 		}
 
 		// make sure we have a trailing '/'
-		if (nul[-1] != '/') *nul++ = '/';
+		// and prevent an invalid read of size 1
+		if (nul - 1 < buf || nul[-1] != '/') *nul++ = '/';
 
 		// resize if necessary
 		if (nul + diff >= buf_lim) {
@@ -143,11 +165,56 @@ char *path_full(char *wd, char *path)
 		*nul = '\0';
 	}
 
-	return buf;
+	// (if it exists) remove the trailing '/'
+	if (nul - 1 > buf && nul[-1] == '/') *--nul = '\0';
+
+	// shrink the buffer to fit the generated path
+	char *out = realloc(buf, sizeof(char) * (nul - buf + 1));
+	if (!out) goto error;
+
+
+	FREE(cwd);
+	return out;
 
 error:
 	FREE(buf);
+	FREE(cwd);
 	return NULL;
+}
+
+/*
+ * Concatenate existing paths.
+ */
+char *path_cat(char *org, char *add)
+{
+	if (!add) {
+		errno = EINVAL;
+		return NULL;
+	}
+
+	// if we have no original string,
+	// or if we get an absolute path,
+	// we need to guarantee a string on the heap
+	if (!org || *add == '/') return strdup(add);
+
+
+	char   *buf;
+	size_t  buf_siz = 0;
+	size_t  org_len = strlen(org);
+
+
+	if (org[org_len - 1] != '/') ++buf_siz;  // ensue trailing '/'
+	buf_siz += org_len + strlen(add) + 1;
+
+	buf = calloc(buf_siz, sizeof(char));
+	if (!buf) return NULL;
+
+	strcat(buf, org);
+	if (org[org_len - 1] != '/') strcat(buf, "/");
+	strcat(buf, add);
+
+
+	return buf;
 }
 
 /*

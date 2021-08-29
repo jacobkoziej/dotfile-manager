@@ -18,20 +18,34 @@
 
 #include <stdlib.h>
 
+#include "core.h"
 #include "settings.h"
 
 
+static dots_t *dots = NULL;
+
+
+void cleanup(void)
+{
+	setting_free();
+	free_dots_t(&dots);
+}
+
 int main(int argc, char **argv)
 {
-	static int optind = 0;
+	static int optind;
 
 
-	if (setting_auto() < 0) goto error;
-	if ((optind = setting_getopt(argc, argv)) < 0) goto error;
+	atexit(cleanup);
+
+
+	if (setting_auto() < 0) return EXIT_FAILURE;
+	if ((optind = setting_getopt(argc, argv)) < 0) return EXIT_FAILURE;
+
+
+	dots = load_targets(settings.targets, argv + optind);
+	if (!dots) return EXIT_FAILURE;
 
 
 	return EXIT_SUCCESS;
-
-error:
-	return EXIT_FAILURE;
 }
