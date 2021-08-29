@@ -47,12 +47,13 @@ setting_t settings = {
 
 static setting_flag_t *flag = &settings.flag;
 
-static char *flags = ":kns:w:";
+static char *flags = ":Skns:w:";
 static struct option long_flags[] = {
 	{     "color", optional_argument, NULL,   0},
 	{   "dry-run",       no_argument, NULL, 'n'},
 	{"keep-going",       no_argument, NULL, 'k'},
 	{ "store-dir", required_argument, NULL, 's'},
+	{      "stow",       no_argument, NULL, 'S'},
 	{  "work-dir", required_argument, NULL, 'w'},
 	{           0,                 0,    0,   0},
 };
@@ -109,6 +110,9 @@ int setting_getopt(int argc, char **argv)
 		}
 	}
 
+	// we need to have a mode set to continue execution
+	if (!settings.mode) goto error;
+
 	// we need to have at least one target
 	if ((settings.targets = argc - optind) <= 0) goto error;
 
@@ -154,6 +158,7 @@ static int ansi_sgr_mode(char *mode)
 static int parse_long_flags(const char *name)
 {
 	if (!strcmp(name, "color") && ansi_sgr_mode(optarg) < 0) goto error;
+	if (!strcmp(name, "stow") && set_mode('S') < 0) goto error;
 
 
 	return 0;
@@ -168,6 +173,11 @@ error:
 static int parse_short_flags(int val)
 {
 	switch (val) {
+		// stow
+		case 'S':
+			if (set_mode('S') < 0) goto error;
+			break;
+
 		// keep-going
 		case 'k':
 			flag->keep_going = true;
@@ -200,6 +210,26 @@ static int parse_short_flags(int val)
 
 error:
 	return -1;
+}
+
+/*
+ * Set the operation mode.
+ */
+static int set_mode(char mode)
+{
+	assert(mode == 'S');
+
+
+	// something went horribly wrong
+	if (mode != 'S') return -1;
+
+	// we can only run one mode at a time
+	if (settings.mode) return -1;
+
+	settings.mode = mode;
+
+
+	return 0;
 }
 
 /*
