@@ -30,32 +30,33 @@
 #include "settings.h"
 
 
+dots_t dots = {
+	.targets = NULL,
+	.n       = 0,
+};
+
 static bool *keep_going = &settings.flag.keep_going;
 
 
 /*
  * Free a dots_t type.
  */
-void free_dots_t(dots_t **d)
+void free_dots_t(void)
 {
-	if (!d)  return;
-	if (!*d) return;
-
-	for (size_t i = 0; i < (*d)->n; i++) {
-		target_t *t = (*d)->targets + i;
+	for (size_t i = 0; i < dots.n; i++) {
+		target_t *t = dots.targets + i;
 		FREE(t->src_path);
 		FREE(t->dst_path);
 		FREE(t->link_path);
 	}
 
-	FREE((*d)->targets);
-	FREE(*d);
+	FREE(dots.targets);
 }
 
 /*
  * Initialize a dots_t type.
  */
-dots_t *load_targets(int argc, char **argv)
+int load_targets(int argc, char **argv)
 {
 	assert(argc > 0);
 	assert(argv);
@@ -63,23 +64,22 @@ dots_t *load_targets(int argc, char **argv)
 
 	if (argc <= 0 || !argv) {
 		errno = EINVAL;
-		return NULL;
+		return -1;
 	}
 
 	for (int i = 0; i < argc; i++) {
 		if (!argv[i]) {
 			errno = EINVAL;
-			return NULL;
+			return -1;
 		}
 
 		if (*argv[i] == '\0') {
 			errno = ENOENT;
-			return NULL;
+			return -1;
 		}
 	}
 
 
-	dots_t   *d;
 	target_t *t;
 	struct stat st;
 
@@ -87,16 +87,13 @@ dots_t *load_targets(int argc, char **argv)
 	char *sd = settings.store_dir;
 
 
-	d = calloc(1, sizeof(dots_t));
-	if (!d) return NULL;
-
-	d->n = argc;
-	d->targets = calloc(d->n, sizeof(target_t));
-	if (!d->targets) goto error;
+	dots.n = argc;
+	dots.targets = calloc(dots.n, sizeof(target_t));
+	if (!dots.targets) goto error;
 
 
-	for (size_t i = 0; i < d->n; i++) {
-		t = d->targets + i;
+	for (size_t i = 0; i < dots.n; i++) {
+		t = dots.targets + i;
 
 		// since we're dealing with static memory there's no need to
 		// allocate the input string onto the heap
@@ -136,9 +133,9 @@ dots_t *load_targets(int argc, char **argv)
 	}
 
 
-	return d;
+	return 0;
 
 error:
-	free_dots_t(&d);
-	return NULL;
+	free_dots_t();
+	return -1;
 }
