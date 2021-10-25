@@ -41,8 +41,11 @@ typedef struct dots_s {
 } dots_t;
 
 
-void    free_dots_t(dots_t **d);
-dots_t *load_targets(int argc, char **argv);
+extern dots_t dots;
+
+
+void free_dots_t(void);
+int  load_targets(int argc, char **argv);
 
 
 #endif /* DOTFILE_MANAGER_CORE */

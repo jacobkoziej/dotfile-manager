@@ -22,13 +22,10 @@
 #include "settings.h"
 
 
-static dots_t *dots = NULL;
-
-
 void cleanup(void)
 {
 	setting_free();
-	free_dots_t(&dots);
+	free_dots_t();
 }
 
 int main(int argc, char **argv)
@@ -43,8 +40,8 @@ int main(int argc, char **argv)
 	if ((optind = setting_getopt(argc, argv)) < 0) return EXIT_FAILURE;
 
 
-	dots = load_targets(settings.targets, argv + optind);
-	if (!dots) return EXIT_FAILURE;
+	if(load_targets(settings.targets, argv + optind) < 0)
+		return EXIT_FAILURE;
 
 
 	return EXIT_SUCCESS;
